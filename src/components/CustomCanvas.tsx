@@ -6,7 +6,7 @@ import BarChart from './BarChart';
 
 function CustomCanvas() {
     return (
-        <Canvas gl={{ preserveDrawingBuffer: true }} camera={{ position: [20, 5, 40], fov: 50 }}>
+        <Canvas data-cy="cy-canvas" gl={{ preserveDrawingBuffer: true }} camera={{ position: [20, 5, 40], fov: 50 }}>
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} />
             <BarChart></BarChart>
