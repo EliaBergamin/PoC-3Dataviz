@@ -4,6 +4,13 @@ import viteLogo from '/vite.svg' */
 import './App.css'
 import CustomCanvas from './components/CustomCanvas.tsx';
 
+export interface rawData {
+  id: number;
+  labelX: string;
+  value: number;
+  labelZ: string;
+}
+
 function App() {
 /*   const [count, setCount] = useState(0)
  */

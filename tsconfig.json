@@ -5,6 +5,6 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "types": ["cypress", "@percy/cypress"]
+    "types": ["cypress", "@percy/cypress", "node", "vitest"]
   }
 }
