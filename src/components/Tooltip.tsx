@@ -10,7 +10,7 @@ type TooltipProps = {
 function Tooltip({ bar, position }: TooltipProps) {
     return (
         <Html position={position} key={bar.id}>
-          <div style={{ background: "white", width: "100px",
+          <div style={{ background: "white", width: "150px",
             padding: "3px", borderRadius: "5px", 
             boxShadow: "0 0 5px rgba(0,0,0,0.3)" }}>
             Altezza: {bar.value} <br />

@@ -84,7 +84,8 @@ function CustomCanvas() {
             data-testid="cy-canvas"
             gl={{ preserveDrawingBuffer: true }}
             camera={{ 
-                position: [-fetched_data.length/8, 20, -fetched_data.length/4], 
+                position: [3.4301854408067705,10.60071277758357,-32.28290921318735], 
+                rotation: [-3.025, -0.38, 3.2],
                 fov: 75,
                 near: 0.1,
                 far: 1000
@@ -93,11 +94,11 @@ function CustomCanvas() {
             <pointLight position={[10, 10, 10]} />
             <BarChart fetched_data={fetched_data}></BarChart>
             <OrbitControls makeDefault
-                target={[0, 0, 0]}
+                target={[25, 0, 10]}
             />
             <GizmoHelper
                 alignment='top-left'
-                margin={[80, 80]}>
+                margin={[60, 60]}>
                 <GizmoViewport
                     axisColors={['red', 'green', 'blue']}
                     labelColor='black' />
