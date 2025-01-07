@@ -1,18 +1,17 @@
 import { ThreeEvent } from '@react-three/fiber';
-import { tabData } from './BarChart';
-import { rawData } from '../App';
+import { rawData, tabData } from '../App';
 
 type BarProps = {
     row: tabData;
     xLabels: Set<string>;
     zLabels: Set<string>;
-    isTransparent: boolean;
+    isFiltered: boolean;
     userData: Record<string, any>;
     onClick: (id: string, e: ThreeEvent<MouseEvent>) => void;
     onHover?: (e: ThreeEvent<PointerEvent>, bar: rawData | null) => void;
 };
 
-function Bar({ row, xLabels, zLabels, isTransparent, userData, onClick }: BarProps) {
+function Bar({ row, xLabels, zLabels, isFiltered, userData, onClick }: BarProps) {
     const colors: string[] = ["red", "blue", "yellow"];
     const { id, labelX, value, labelZ } = row;
 /*     const rawRow: rawData = {
@@ -37,7 +36,7 @@ function Bar({ row, xLabels, zLabels, isTransparent, userData, onClick }: BarPro
                 color={colors[labelZ]}
                 clearcoat={0.9} // Strato protettivo lucido
                 transparent={true}
-                opacity={isTransparent ? 0.2 : 1}
+                opacity={isFiltered ? 1 : 0.1}
             />
         </mesh >
     );

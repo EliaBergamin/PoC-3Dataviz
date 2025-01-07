@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +65,57 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+} */
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+#title{
+  text-align: center;
+  font-size: larger;
+  background-color: #282c34;
+  color: white;
+  margin-top: 0px;
+  padding: 20px;
+}
+
+#container{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+footer{
+  background-color: #282c34;
+  color : white;
+  padding: 10px;
+  text-align: center;
+}
+
+.filter-body{
+  display: flex;
+  flex-direction:column;
+  justify-content: space-around;
+}
+
+button{
+  border-radius: 50px;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  font-size: larger;
+  cursor: pointer;
 }

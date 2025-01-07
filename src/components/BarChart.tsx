@@ -8,19 +8,16 @@ import { rawData } from "../App";
 import Tooltip from "./Tooltip";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
-
-export interface tabData {
-  id: number;
-  labelX: number;
-  value: number;
-  labelZ: number;
-}
+import { tabData } from "../App";
 
 type BarChartProps = {
   fetched_data: rawData[];
+  filteredData: tabData[];
+  allData: tabData[];
+  showAveragePlane: boolean;
 };
 
-function BarChart({ fetched_data }: BarChartProps) {
+function BarChart({ fetched_data, filteredData, allData, showAveragePlane }: BarChartProps) {
 
   let xLabels = new Set(fetched_data.map((d) => d.labelX));
   let yValues = new Set(fetched_data.map((d) => d.value));
@@ -107,27 +104,40 @@ function BarChart({ fetched_data }: BarChartProps) {
       }, 40);
     }
   }; */
+  const nLabel = xLabels.size;
+
   return (
     <>
       {
-        data.map((d: tabData) => (
+        data.map((d: tabData) => {          
+          const isFiltered = filteredData.some((f) => f.labelX === d.labelX && f.labelZ === d.labelZ && f.value === d.value);
+          return (
           <Bar
+            key={d.id}
             row={d}
             xLabels={xLabels}
             zLabels={zLabels}
-            isTransparent={
-              selectedBar ? d.value < selectedBar.value : false // Trasparente se altezza minore della barra selezionata
-            }
+            isFiltered={isFiltered}
             userData={{ id: d.id }}
             onClick={handleBarClick}
 /*             onHover={handleHover}
  */          />
-        ))
-      }
+        );
+      })};
       <XAxis xLabels={Array.from(xLabels)} />
       <YAxis yValues={Array.from(yValues)} xAxisLength={6 * xLabels.size} />
       <ZAxis zLabels={Array.from(zLabels)} />
       {hoveredBar && <Tooltip position={tooltipPosition} bar={hoveredBar} />}
+      {/* Piano medio, visibile solo se showAveragePlane è true */}
+      {showAveragePlane && (
+        <mesh
+          position={[3 * nLabel / 2, data.map((d, index) => d.value).reduce((acc, curr) => acc + curr, 0) / data.length, 7.5]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
+          <planeGeometry args={[3 * nLabel, 15]} />
+          <meshStandardMaterial color="lightgray" transparent={true} opacity={0.4} depthWrite={false} />
+        </mesh>
+      )}
     </>
   );
 }
