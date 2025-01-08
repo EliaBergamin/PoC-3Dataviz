@@ -13,15 +13,13 @@ import { tabData } from "../App";
 type BarChartProps = {
   fetched_data: rawData[];
   filteredData: tabData[];
-  allData: tabData[];
   showAveragePlane: boolean;
-  resetFilters: () => void;
   setFilteredData: (value: React.SetStateAction<tabData[]>) => void;
   setSelectedBar: (value: React.SetStateAction<tabData | null>) => void;
   isGreaterChecked: boolean;
 };
 
-function BarChart({ fetched_data, filteredData, allData, showAveragePlane, resetFilters, setFilteredData, setSelectedBar, isGreaterChecked }: BarChartProps) {
+function BarChart({ fetched_data, filteredData, showAveragePlane, setFilteredData, setSelectedBar, isGreaterChecked }: BarChartProps) {
 
   let xLabels = new Set(fetched_data.map((d) => d.labelX));
   let yValues = new Set(fetched_data.map((d) => d.value));
@@ -90,28 +88,6 @@ function BarChart({ fetched_data, filteredData, allData, showAveragePlane, reset
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [camera, scene, data]);
 
-  /* 
-    const handleHover = (e: ThreeEvent<PointerEvent>, bar: rawData | null) => {
-      if (hoverTimeout.current !== null) {
-        clearTimeout(hoverTimeout.current);
-      }
-      if (bar) {
-        hoverTimeout.current = setTimeout(() => {
-          const { x, y, z } = e.point;
-  
-          const intersections = e.intersections;
-          if (intersections[0]?.object === e.object) {
-            setHoveredBar(bar ? bar : null); // Mostra il tooltip
-  
-            setTooltipPosition(new THREE.Vector3(x + 0.3, y + 0.3, z + 0.3));
-          }
-        }, 40); // Ritarda l'aggiornamento
-      } else {
-        hoverTimeout.current = setTimeout(() => {
-          setHoveredBar(null); // Nasconde il tooltip
-        }, 40);
-      }
-    }; */
   const nLabel = xLabels.size;
   const xAxisLength = 6 * nLabel ;
   const zAxisLength = 6 * zLabels.size ;
@@ -125,13 +101,10 @@ function BarChart({ fetched_data, filteredData, allData, showAveragePlane, reset
             <Bar
               key={d.id}
               row={d}
-              xLabels={xLabels}
-              zLabels={zLabels}
               isFiltered={isFiltered}
               userData={{ id: d.id }}
               onClick={handleBarClick}
-/*             onHover={handleHover}
- */          />
+          />
           );
         })};
       <XAxis xLabels={Array.from(xLabels)} />

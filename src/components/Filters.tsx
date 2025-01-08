@@ -5,6 +5,7 @@ type FiltersProps = {
   data: tabData[];
   setFilteredData: (value: React.SetStateAction<tabData[]>) => void;
   selectedBar: tabData | null;
+  setSelectedBar: (value: React.SetStateAction<tabData | null>) => void;
   setIsGreaterChecked: (value: React.SetStateAction<boolean>) => void;
   isGreaterChecked: boolean;
 }
@@ -31,7 +32,7 @@ const filterBelowValue = (data: tabData[], value: number) => {
   return data.filter((d) => d.value <= value);
 };
 
-function Filters({ data, setFilteredData, selectedBar, setIsGreaterChecked, isGreaterChecked }: FiltersProps) {
+function Filters({ data, setFilteredData, selectedBar, setSelectedBar, setIsGreaterChecked, isGreaterChecked }: FiltersProps) {
   const [nValue, setNValue] = useState(""); // Valore di N per il filtro top/bottom
   const [isTopChecked, setIsTopChecked] = useState(false); // Checkbox top
   const [isBottomChecked, setIsBottomChecked] = useState(false); // Checkbox bottom
@@ -49,6 +50,7 @@ function Filters({ data, setFilteredData, selectedBar, setIsGreaterChecked, isGr
     if (isTopChecked) filteredData = filterTopN(filteredData, parseInt(nValue));
     if (isBottomChecked) filteredData = filterBottomN(filteredData, parseInt(nValue));
     setFilteredData(filteredData);
+    setSelectedBar(null);
   };
 
   const handleAverageFilter = () => {
@@ -57,12 +59,13 @@ function Filters({ data, setFilteredData, selectedBar, setIsGreaterChecked, isGr
     if (isUpperChecked) filteredData = filterAboveValue([...data], globalAverage);
     if (isLowerChecked) filteredData = filterBelowValue([...data], globalAverage);
     setFilteredData(filteredData);
+    setSelectedBar(null);
   };
 
   const handleBarFilter = () => {
     let filteredData = [...data];
-    console.log(selectedBar);
-    console.log(isGreaterChecked);
+    /* console.log(selectedBar);
+    console.log(isGreaterChecked); */
     if (!selectedBar) 
       return;
     isGreaterChecked = !isGreaterChecked;

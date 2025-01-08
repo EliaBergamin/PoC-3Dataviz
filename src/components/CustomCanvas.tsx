@@ -3,20 +3,18 @@ import { rawData, tabData } from '../App';
 import { Canvas } from '@react-three/fiber';
 import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import BarChart from './BarChart';
-import CameraLogger from './CameraLogger';
-
+/* import CameraLogger from './CameraLogger';
+ */
 type CustomCanvasProps = {
     fetched_data: rawData[];
     filteredData: tabData[];
-    allData: tabData[];
     showAveragePlane: boolean;
-    resetFilters: () => void;
     setFilteredData: (value: React.SetStateAction<tabData[]>) => void;
     setSelectedBar: (value: React.SetStateAction<tabData | null>) => void;
     isGreaterChecked: boolean;
 };
 
-function CustomCanvas({ fetched_data, filteredData, allData, showAveragePlane, resetFilters, setFilteredData, setSelectedBar, isGreaterChecked }: CustomCanvasProps) {
+function CustomCanvas({ fetched_data, filteredData, showAveragePlane, setFilteredData, setSelectedBar, isGreaterChecked }: CustomCanvasProps) {
 
     return (
         <Canvas
@@ -37,15 +35,14 @@ function CustomCanvas({ fetched_data, filteredData, allData, showAveragePlane, r
             <BarChart
                 fetched_data={fetched_data}
                 filteredData={filteredData}
-                allData={allData}
                 showAveragePlane={showAveragePlane}
-                resetFilters={resetFilters}
                 setFilteredData={setFilteredData}
                 setSelectedBar={setSelectedBar}
                 isGreaterChecked={isGreaterChecked}
             />
             <OrbitControls makeDefault
                 target={[25, 0, 10]}
+                dampingFactor={0.1}
             />
             <GizmoHelper
                 alignment='top-left'

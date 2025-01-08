@@ -3,23 +3,16 @@ import { rawData, tabData } from '../App';
 
 type BarProps = {
     row: tabData;
-    xLabels: Set<string>;
-    zLabels: Set<string>;
     isFiltered: boolean;
     userData: Record<string, any>;
     onClick: (id: string, e: ThreeEvent<MouseEvent>) => void;
     onHover?: (e: ThreeEvent<PointerEvent>, bar: rawData | null) => void;
 };
 
-function Bar({ row, xLabels, zLabels, isFiltered, userData, onClick }: BarProps) {
+function Bar({ row, isFiltered, userData, onClick }: BarProps) {
     const colors: string[] = ["red", "blue", "yellow"];
     const { id, labelX, value, labelZ } = row;
-/*     const rawRow: rawData = {
-        id: id,
-        labelX: Array.from(xLabels)[labelX],
-        value: value,
-        labelZ: Array.from(zLabels)[labelZ]
-    }; */
+
     return (
         <mesh
             key={id}

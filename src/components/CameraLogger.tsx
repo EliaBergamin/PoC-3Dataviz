@@ -1,5 +1,5 @@
-import React, { useRef, useEffect } from 'react';
-import { Canvas, useThree } from '@react-three/fiber';
+import { useEffect } from 'react';
+import {  useThree } from '@react-three/fiber';
 
 function CameraLogger() {
     const { camera } = useThree(); // Accede alla camera attiva

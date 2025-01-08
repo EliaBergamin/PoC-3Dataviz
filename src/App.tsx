@@ -56,38 +56,38 @@ function App() {
     { id: 34, labelX: 'Papaya', value: 13, labelZ: 'Padova' },
     { id: 35, labelX: 'Papaya', value: 15, labelZ: 'Venezia' },
     { id: 36, labelX: 'Papaya', value: 17, labelZ: 'Verona' },
-    { id: 37, labelX: 'Pineapple', value: 12, labelZ: 'Vicenza' },
-    { id: 38, labelX: 'Pineapple', value: 14, labelZ: 'Padova' },
-    { id: 39, labelX: 'Pineapple', value: 16, labelZ: 'Venezia' },
-    { id: 40, labelX: 'Pineapple', value: 18, labelZ: 'Verona' },
-    { id: 41, labelX: 'Peach', value: 13, labelZ: 'Vicenza' },
-    { id: 42, labelX: 'Peach', value: 15, labelZ: 'Padova' },
-    { id: 43, labelX: 'Peach', value: 17, labelZ: 'Venezia' },
-    { id: 44, labelX: 'Peach', value: 19, labelZ: 'Verona' },
-    { id: 45, labelX: 'Plum', value: 14, labelZ: 'Vicenza' },
-    { id: 46, labelX: 'Plum', value: 16, labelZ: 'Padova' },
-    { id: 47, labelX: 'Plum', value: 18, labelZ: 'Venezia' },
-    { id: 48, labelX: 'Plum', value: 20, labelZ: 'Verona' },
-    { id: 49, labelX: 'Grapefruit', value: 15, labelZ: 'Vicenza' },
-    { id: 50, labelX: 'Grapefruit', value: 17, labelZ: 'Padova' },
-    { id: 51, labelX: 'Grapefruit', value: 19, labelZ: 'Venezia' },
-    { id: 52, labelX: 'Grapefruit', value: 21, labelZ: 'Verona' },
-    { id: 53, labelX: 'Cherry', value: 16, labelZ: 'Vicenza' },
-    { id: 54, labelX: 'Cherry', value: 18, labelZ: 'Padova' },
-    { id: 55, labelX: 'Cherry', value: 0, labelZ: 'Venezia' },
-    { id: 56, labelX: 'Cherry', value: 22, labelZ: 'Verona' },
-    { id: 57, labelX: 'Blueberry', value: 17, labelZ: 'Vicenza' },
-    { id: 58, labelX: 'Blueberry', value: 9, labelZ: 'Padova' },
-    { id: 59, labelX: 'Blueberry', value: 21, labelZ: 'Venezia' },
-    { id: 60, labelX: 'Blueberry', value: 23, labelZ: 'Verona' },
-    { id: 61, labelX: 'Blackberry', value: 8, labelZ: 'Vicenza' },
-    { id: 62, labelX: 'Blackberry', value: 2, labelZ: 'Padova' },
-    { id: 63, labelX: 'Blackberry', value: 22, labelZ: 'Venezia' },
-    { id: 64, labelX: 'Blackberry', value: 4, labelZ: 'Verona' },
-    { id: 65, labelX: 'Raspberry', value: 19, labelZ: 'Vicenza' },
-    { id: 66, labelX: 'Raspberry', value: 11, labelZ: 'Padova' },
-    { id: 67, labelX: 'Raspberry', value: 23, labelZ: 'Venezia' },
-    { id: 68, labelX: 'Raspberry', value: 5, labelZ: 'Verona' }
+    { id: 37, labelX: 'Ananas', value: 12, labelZ: 'Vicenza' },
+    { id: 38, labelX: 'Ananas', value: 14, labelZ: 'Padova' },
+    { id: 39, labelX: 'Ananas', value: 16, labelZ: 'Venezia' },
+    { id: 40, labelX: 'Ananas', value: 18, labelZ: 'Verona' },
+    { id: 41, labelX: 'Pesche', value: 13, labelZ: 'Vicenza' },
+    { id: 42, labelX: 'Pesche', value: 15, labelZ: 'Padova' },
+    { id: 43, labelX: 'Pesche', value: 17, labelZ: 'Venezia' },
+    { id: 44, labelX: 'Pesche', value: 19, labelZ: 'Verona' },
+    { id: 45, labelX: 'Prugne', value: 14, labelZ: 'Vicenza' },
+    { id: 46, labelX: 'Prugne', value: 16, labelZ: 'Padova' },
+    { id: 47, labelX: 'Prugne', value: 18, labelZ: 'Venezia' },
+    { id: 48, labelX: 'Prugne', value: 20, labelZ: 'Verona' },
+    { id: 49, labelX: 'Angurie', value: 15, labelZ: 'Vicenza' },
+    { id: 50, labelX: 'Angurie', value: 17, labelZ: 'Padova' },
+    { id: 51, labelX: 'Angurie', value: 19, labelZ: 'Venezia' },
+    { id: 52, labelX: 'Angurie', value: 21, labelZ: 'Verona' },
+    { id: 53, labelX: 'Ciliegie', value: 16, labelZ: 'Vicenza' },
+    { id: 54, labelX: 'Ciliegie', value: 18, labelZ: 'Padova' },
+    { id: 55, labelX: 'Ciliegie', value: 0, labelZ: 'Venezia' },
+    { id: 56, labelX: 'Ciliegie', value: 22, labelZ: 'Verona' },
+    { id: 57, labelX: 'Mirtilli', value: 17, labelZ: 'Vicenza' },
+    { id: 58, labelX: 'Mirtilli', value: 9, labelZ: 'Padova' },
+    { id: 59, labelX: 'Mirtilli', value: 21, labelZ: 'Venezia' },
+    { id: 60, labelX: 'Mirtilli', value: 23, labelZ: 'Verona' },
+    { id: 61, labelX: 'Lamponi', value: 8, labelZ: 'Vicenza' },
+    { id: 62, labelX: 'Lamponi', value: 2, labelZ: 'Padova' },
+    { id: 63, labelX: 'Lamponi', value: 22, labelZ: 'Venezia' },
+    { id: 64, labelX: 'Lamponi', value: 4, labelZ: 'Verona' },
+    { id: 65, labelX: 'More', value: 19, labelZ: 'Vicenza' },
+    { id: 66, labelX: 'More', value: 11, labelZ: 'Padova' },
+    { id: 67, labelX: 'More', value: 23, labelZ: 'Venezia' },
+    { id: 68, labelX: 'More', value: 5, labelZ: 'Verona' }
   ];
   let xLabels = new Set(fetched_data.map((d) => d.labelX));
   let zLabels = new Set(fetched_data.map((d) => d.labelZ));
@@ -132,15 +132,14 @@ function App() {
           data={data}
           setFilteredData={setFilteredData}
           selectedBar={selectedBar}
+          setSelectedBar={setSelectedBar}
           setIsGreaterChecked={setIsGreaterChecked}
           isGreaterChecked={isGreaterChecked} />
       </div>
       <CustomCanvas
         fetched_data={fetched_data}
         filteredData={filteredData}
-        allData={data}
         showAveragePlane={showAveragePlane}
-        resetFilters={resetFilters}
         setFilteredData={setFilteredData}
         setSelectedBar={setSelectedBar}
         isGreaterChecked={isGreaterChecked}
