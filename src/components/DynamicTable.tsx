@@ -27,7 +27,7 @@ function DynamicTable({ filteredData, allData, xLabels, zLabels, setFilteredData
 
   const handleCellClick = (id: string) => {
     const clickedBar: tabData | undefined = allData.find((bar) => bar.id.toString() === id);
-
+    console.log(clickedBar);
     if (clickedBar) {
       setSelectedBar(clickedBar); // Imposta la barra selezionata
       if (isGreaterChecked)
@@ -58,7 +58,7 @@ function DynamicTable({ filteredData, allData, xLabels, zLabels, setFilteredData
               );
               const id = index * row.length + i + 1;
               return (
-                <td key={id} onClick={() => handleCellClick(id.toString())} style={{ backgroundColor: isHighlighted ? "lightgreen" : "lightgray" }}>
+                <td key={id} id={id.toString()} onClick={() => handleCellClick(id.toString())} style={{ backgroundColor: isHighlighted ? "lightgreen" : "lightgray" }}>
                   {value}
                 </td>
               );
