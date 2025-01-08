@@ -117,8 +117,8 @@ function BarChart({ fetched_data, filteredData, showAveragePlane, setFilteredDat
           position={[xAxisLength/2, data.map((d) => d.value).reduce((acc, curr) => acc + curr, 0) / data.length, zAxisLength/2]}
           rotation={[-Math.PI / 2, 0, 0]}
         >
-          <planeGeometry args={[xAxisLength, zAxisLength]} />
-          <meshStandardMaterial color="lightgray" transparent={true} opacity={0.4} depthWrite={false} />
+          <planeGeometry args={[xAxisLength, zAxisLength]}/>
+          <meshStandardMaterial color="lightgray" transparent={true} opacity={0.4} depthWrite={false} side={THREE.DoubleSide}/>
         </mesh>
       )}
     </>
