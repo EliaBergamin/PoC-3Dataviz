@@ -96,8 +96,10 @@ function App() {
     labelX: Array.from(xLabels).indexOf(d.labelX),
     labelZ: Array.from(zLabels).indexOf(d.labelZ)
   }));
-  const [filteredData, setFilteredData] = useState(data);
 
+  const [filteredData, setFilteredData] = useState(data);
+  const [selectedBar, setSelectedBar] = useState<tabData | null>(null);
+  const [isGreaterChecked, setIsGreaterChecked] = useState(true); // Checkbox sopra una barra
 
   const [showAveragePlane, setShowAveragePlane] = useState(true); // Stato per la visibilità del piano medio
 
@@ -107,21 +109,45 @@ function App() {
   };
   const resetFilters = () => {
     setFilteredData(data); // Ripristina i dati originali
-    setShowAveragePlane(true); // Mostra il piano medio
+    /* setShowAveragePlane(true); */ // Mostra il piano medio
   };
   return (
-    <div style={{ verticalAlign: "middle", height: "100vh" }}>
-      <DynamicTable filteredData={filteredData} allData={data} xLabels={Array.from(xLabels)} zLabels={Array.from(zLabels)}/>
-      <div style={{ margin: "10px" }}>
-        <button onClick={toggleAveragePlane}>
-          {showAveragePlane ? "Nascondi piano medio" : "Mostra piano medio"}
-        </button>
-        <button style={{ marginLeft: "10px" }} onClick={resetFilters}>Resetta filtri</button>
+    <>
+      <div id='controls'>
+        <DynamicTable
+          filteredData={filteredData}
+          allData={data}
+          xLabels={Array.from(xLabels)}
+          zLabels={Array.from(zLabels)}
+          setFilteredData={setFilteredData}
+          setSelectedBar={setSelectedBar}
+          isGreaterChecked={isGreaterChecked} />
+        <div style={{ margin: "10px" }} id='buttons'>
+          <button onClick={toggleAveragePlane}>
+            {showAveragePlane ? "Nascondi piano medio" : "Mostra piano medio"}
+          </button>
+          <button style={{ marginLeft: "10px" }} onClick={resetFilters}>Resetta filtri</button>
+        </div>
+        <Filters
+          data={data}
+          setFilteredData={setFilteredData}
+          selectedBar={selectedBar}
+          setIsGreaterChecked={setIsGreaterChecked}
+          isGreaterChecked={isGreaterChecked} />
       </div>
-      <CustomCanvas fetched_data={fetched_data} filteredData={filteredData} allData={data} showAveragePlane={showAveragePlane}/> 
-      <Filters data={data} setFilteredData={setFilteredData} /> 
+      <CustomCanvas
+        fetched_data={fetched_data}
+        filteredData={filteredData}
+        allData={data}
+        showAveragePlane={showAveragePlane}
+        resetFilters={resetFilters}
+        setFilteredData={setFilteredData}
+        setSelectedBar={setSelectedBar}
+        isGreaterChecked={isGreaterChecked}
+      />
+
       {/*       <Footer /> */}
-    </div>
+    </>
   )
 }
 

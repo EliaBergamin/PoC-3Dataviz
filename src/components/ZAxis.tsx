@@ -1,9 +1,8 @@
-import { useFrame } from "@react-three/fiber";
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import myFont from 'three/examples/fonts/helvetiker_regular.typeface.json';
 import * as THREE from 'three';
-import { extend, Object3DNode } from "@react-three/fiber";
+import { extend } from "@react-three/fiber";
 extend({ TextGeometry });
 
 type ZAxisProps = {
@@ -25,31 +24,8 @@ function ZAxis({ zLabels, zColor = 'blue' }: ZAxisProps) {
     position: new THREE.Vector3(-1, 0, 5 * index + 3),
     rotation: new THREE.Euler(0, Math.PI, 0, 'XYZ')
   }));
-  useFrame(({ camera }) => {
-    // Usa la posizione della camera per calcolare il ridimensionamento
-    const xdistance = camera.position.x;
-    const ydistance = camera.position.y;
-    const distance = new THREE.Vector3(xdistance, ydistance, 0).length();
-    labels.forEach((label, index) => {
-      const element = document.getElementById(`z-label-${index}`);
-/*       const distance = label.position.clone().add(camera.position.negate()).length();
- */      if (element) {
-        let scale: number;
 
-        if (distance < 40) {
-          scale = 1;
-        }
-        else if (distance > 100) {
-          scale = 0.4;
-
-        }
-        else {
-          scale = 40 / distance;
-        }
-        element.style.transform = `scale(${scale})`;
-      }
-    });
-  });
+    
   const font = new FontLoader().parse(myFont);
 
   return (

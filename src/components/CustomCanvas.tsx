@@ -10,18 +10,23 @@ type CustomCanvasProps = {
     filteredData: tabData[];
     allData: tabData[];
     showAveragePlane: boolean;
+    resetFilters: () => void;
+    setFilteredData: (value: React.SetStateAction<tabData[]>) => void;
+    setSelectedBar: (value: React.SetStateAction<tabData | null>) => void;
+    isGreaterChecked: boolean;
 };
 
-function CustomCanvas({ fetched_data, filteredData, allData, showAveragePlane }: CustomCanvasProps) {
+function CustomCanvas({ fetched_data, filteredData, allData, showAveragePlane, resetFilters, setFilteredData, setSelectedBar, isGreaterChecked }: CustomCanvasProps) {
 
     return (
         <Canvas
 
+            id='canvas'
             data-cy="cy-canvas"
             data-testid="cy-canvas"
             gl={{ preserveDrawingBuffer: true }}
-            camera={{ 
-                position: [3.4301854408067705,13.60071277758357,-32.28290921318735], 
+            camera={{
+                position: [3.4301854408067705, 13.60071277758357, -32.28290921318735],
                 rotation: [-3.025, -0.38, 3.2],
                 fov: 75,
                 near: 0.1,
@@ -29,7 +34,16 @@ function CustomCanvas({ fetched_data, filteredData, allData, showAveragePlane }:
             }}>
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} />
-            <BarChart fetched_data={fetched_data} filteredData={filteredData} allData={allData} showAveragePlane={showAveragePlane}></BarChart>
+            <BarChart
+                fetched_data={fetched_data}
+                filteredData={filteredData}
+                allData={allData}
+                showAveragePlane={showAveragePlane}
+                resetFilters={resetFilters}
+                setFilteredData={setFilteredData}
+                setSelectedBar={setSelectedBar}
+                isGreaterChecked={isGreaterChecked}
+            />
             <OrbitControls makeDefault
                 target={[25, 0, 10]}
             />
@@ -40,7 +54,7 @@ function CustomCanvas({ fetched_data, filteredData, allData, showAveragePlane }:
                     axisColors={['red', 'green', 'blue']}
                     labelColor='black' />
             </GizmoHelper>
-            <CameraLogger/>
+            {/* <CameraLogger /> */}
         </Canvas>
     );
 }
