@@ -109,6 +109,7 @@ function App() {
   };
   const resetFilters = () => {
     setFilteredData(data); // Ripristina i dati originali
+    setSelectedBar(null); // Deseleziona la barra
     /* setShowAveragePlane(true); */ // Mostra il piano medio
   };
   return (
