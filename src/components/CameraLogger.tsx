@@ -1,9 +1,16 @@
 import { useEffect } from 'react';
-import {  useThree } from '@react-three/fiber';
+import { useThree } from '@react-three/fiber';
 
 function CameraLogger() {
     const { camera } = useThree(); // Accede alla camera attiva
+    useEffect(() => {
 
+        console.log('Camera properties:', {
+            position: camera.position,
+            rotation: camera.rotation,
+/*                 fov: camera.fov,
+ */            });
+    }, [camera]);
     useEffect(() => {
         const handleMouseUp = () => {
             console.log('Camera properties:', {

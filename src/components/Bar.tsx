@@ -4,12 +4,13 @@ import { rawData, tabData } from '../App';
 type BarProps = {
     row: tabData;
     isFiltered: boolean;
+    aura: boolean;
     userData: Record<string, any>;
     onClick: (id: string, e: ThreeEvent<MouseEvent>) => void;
     onHover?: (e: ThreeEvent<PointerEvent>, bar: rawData | null) => void;
 };
 
-function Bar({ row, isFiltered, userData, onClick }: BarProps) {
+function Bar({ row, isFiltered, aura, userData, onClick }: BarProps) {
     const colors: string[] = ["red", "blue", "yellow"];
     const { id, labelX, value, labelZ } = row;
 
@@ -26,11 +27,13 @@ function Bar({ row, isFiltered, userData, onClick }: BarProps) {
             < boxGeometry args={[2, value, 2]} />
             {/* Materiale della barra */}
             < meshPhysicalMaterial
-                color={colors[labelZ]}
+                color={aura ? 'black' : colors[labelZ]}
                 clearcoat={0.9} // Strato protettivo lucido
                 transparent={true}
                 opacity={isFiltered ? 1 : 0.1}
             />
+            
+      
         </mesh >
     );
 }

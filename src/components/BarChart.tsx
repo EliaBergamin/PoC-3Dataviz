@@ -4,31 +4,27 @@ import XAxis from "./XAxis";
 import ZAxis from "./ZAxis";
 import { ThreeEvent } from "@react-three/fiber";
 import YAxis from "./YAxis";
-import { rawData } from "../App";
 import Tooltip from "./Tooltip";
 import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { tabData } from "../App";
+import { useDataContext } from "./context";
+
 
 type BarChartProps = {
-  fetched_data: rawData[];
-  filteredData: tabData[];
-  showAveragePlane: boolean;
-  setFilteredData: (value: React.SetStateAction<tabData[]>) => void;
-  setSelectedBar: (value: React.SetStateAction<tabData | null>) => void;
-  isGreaterChecked: boolean;
+  selectedBar: tabData | null;
 };
 
-function BarChart({ fetched_data, filteredData, showAveragePlane, setFilteredData, setSelectedBar, isGreaterChecked }: BarChartProps) {
-
-  let xLabels = new Set(fetched_data.map((d) => d.labelX));
-  let yValues = new Set(fetched_data.map((d) => d.value));
+function BarChart({ selectedBar  }: BarChartProps) {
+  const { data, filteredData, setFilteredData, setSelectedBar, xLabels, zLabels, showAveragePlane, isGreaterChecked } = useDataContext();
+  
+  /* let xLabels = new Set(fetched_data.map((d) => d.labelX));
   let zLabels = new Set(fetched_data.map((d) => d.labelZ));
   const data: tabData[] = fetched_data.map((d) => ({
     ...d,
     labelX: Array.from(xLabels).indexOf(d.labelX),
     labelZ: Array.from(zLabels).indexOf(d.labelZ)
-  }));
+  })); */
 
   const handleBarClick = (id: string, event: ThreeEvent<MouseEvent>) => {
     const clickedBar: tabData | undefined = data.find((bar) => bar.id.toString() === id);
@@ -46,7 +42,7 @@ function BarChart({ fetched_data, filteredData, showAveragePlane, setFilteredDat
     }
   }
 
-  const [hoveredBar, setHoveredBar] = useState<rawData | null>(null);
+  const [hoveredBar, setHoveredBar] = useState<tabData | null>(null);
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState(new THREE.Vector3());
   const raycaster = useRef(new THREE.Raycaster());
@@ -68,10 +64,10 @@ function BarChart({ fetched_data, filteredData, showAveragePlane, setFilteredDat
 
       // Trova le intersezioni con le barre
       const intersects = raycaster.current.intersectObjects(scene.children);
-
-      if (intersects.length > 0) {
-        const firstObject = intersects[0].object; // L'oggetto più vicino
-        const intersectedBar = fetched_data.find((bar) => bar.id === firstObject.userData.id);
+      const filteredIntersects = intersects.filter(i => i.object.userData.id !== 'average');
+      if (filteredIntersects.length > 0) {
+        const firstObject = filteredIntersects[0].object; // L'oggetto più vicino
+        const intersectedBar = data.find((bar) => bar.id === firstObject.userData.id);
 
         if (intersectedBar) {
           setHoveredBar(intersectedBar ? intersectedBar : null); // Mostra il tooltip
@@ -80,6 +76,7 @@ function BarChart({ fetched_data, filteredData, showAveragePlane, setFilteredDat
       } else {
         setHoveredBar(null); // Nessuna barra sotto il mouse
       }
+      
     }, 40);
   };
 
@@ -88,9 +85,16 @@ function BarChart({ fetched_data, filteredData, showAveragePlane, setFilteredDat
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [camera, scene, data]);
 
-  const nLabel = xLabels.size;
+  useEffect(() => {
+    if (selectedBar) {
+      camera.position.set(selectedBar.labelX * 6, selectedBar.value+10, -75);
+      camera.lookAt(selectedBar.labelX * 6 + 5, selectedBar.value/2, selectedBar.labelZ * 5 + 3);
+    }
+  }, [selectedBar]);
+
+  const nLabel = xLabels.length;
   const xAxisLength = 6 * nLabel ;
-  const zAxisLength = 6 * zLabels.size ;
+  const zAxisLength = 6 * zLabels.length ;
 
   return (
     <>
@@ -104,18 +108,20 @@ function BarChart({ fetched_data, filteredData, showAveragePlane, setFilteredDat
               isFiltered={isFiltered}
               userData={{ id: d.id }}
               onClick={handleBarClick}
+              aura={selectedBar ? selectedBar.id === d.id : false}
           />
           );
         })};
-      <XAxis xLabels={Array.from(xLabels)} />
-      <YAxis yValues={Array.from(yValues)} xAxisLength={xAxisLength} />
-      <ZAxis zLabels={Array.from(zLabels)} />
+      <XAxis length={xAxisLength} />
+      <YAxis xLength={xAxisLength} />
+      <ZAxis length={zAxisLength}/>
       {hoveredBar && <Tooltip position={tooltipPosition} bar={hoveredBar} />}
       {/* Piano medio, visibile solo se showAveragePlane è true */}
       {showAveragePlane && (
         <mesh
           position={[xAxisLength/2, data.map((d) => d.value).reduce((acc, curr) => acc + curr, 0) / data.length, zAxisLength/2]}
-          rotation={[-Math.PI / 2, 0, 0]}
+          rotation={[-Math.PI / 2, 0, 0]} 
+          userData={{ id: "average" }}
         >
           <planeGeometry args={[xAxisLength, zAxisLength]}/>
           <meshStandardMaterial color="lightgray" transparent={true} opacity={0.4} depthWrite={false} side={THREE.DoubleSide}/>

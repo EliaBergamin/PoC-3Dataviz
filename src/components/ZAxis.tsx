@@ -3,21 +3,22 @@ import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
 import myFont from 'three/examples/fonts/helvetiker_regular.typeface.json';
 import * as THREE from 'three';
 import { extend } from "@react-three/fiber";
+import { useDataContext } from './context';
 extend({ TextGeometry });
 
 type ZAxisProps = {
-  zLabels: string[];
-  zColor?: string;
+  length: number;
+  color?: string;
 };
 
-function ZAxis({ zLabels, zColor = 'blue' }: ZAxisProps) {
+function ZAxis({ length, color = 'blue' }: ZAxisProps) {
   // Assi personalizzati con lunghezze differenti
-  const zAxisLength = 5 * zLabels.length;
+  const { zLabels } = useDataContext();
 
   // Creazione delle linee degli assi
   const zAxis = new THREE.BufferGeometry().setFromPoints([
     new THREE.Vector3(0, 0, 0),
-    new THREE.Vector3(0, 0, zAxisLength),
+    new THREE.Vector3(0, 0, length),
   ]);
   const labels = zLabels.map((text, index) => ({
     text,
@@ -25,32 +26,23 @@ function ZAxis({ zLabels, zColor = 'blue' }: ZAxisProps) {
     rotation: new THREE.Euler(0, Math.PI, 0, 'XYZ')
   }));
 
-    
+
   const font = new FontLoader().parse(myFont);
 
   return (
     <>
       <line>
         <bufferGeometry attach="geometry" {...zAxis} />
-        <lineBasicMaterial attach="material" color={zColor} />
+        <lineBasicMaterial attach="material" color={color} />
       </line>
       {labels.map((label, index) => (
-                <mesh key={index} position={label.position} rotation={label.rotation} >
-                    <textGeometry
-                        args={[label.text, { font, size: 0.5, depth: 0.02 }]}
-                    />
-                    <meshStandardMaterial color="black" />
-                </mesh>
-            ))}
-                {/* <Html
-                    key={index}
-                    position={label.position}
-                    rotation={label.rotation}
-                    zIndexRange={[1, 0]}
-                    style={{ pointerEvents: 'none', fontSize: '14px', transform: 'rotate(-90deg)', color: xColor, whiteSpace: 'nowrap' }}>
-                    <div id={`x-label-${index}`}>{label.text}</div>
-                </Html> 
-            ))}*/}
+        <mesh key={index} position={label.position} rotation={label.rotation} >
+          <textGeometry
+            args={[label.text, { font, size: 0.5, depth: 0.02 }]}
+          />
+          <meshStandardMaterial color="black" />
+        </mesh>
+      ))}
     </>
   );
 }

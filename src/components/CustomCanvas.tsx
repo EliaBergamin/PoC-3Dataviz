@@ -1,24 +1,40 @@
-/* import React, { useEffect, useRef } from 'react';*/
-import { rawData, tabData } from '../App';
+import { tabData } from '../App';
 import { Canvas } from '@react-three/fiber';
 import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import BarChart from './BarChart';
-/* import CameraLogger from './CameraLogger';
- */
+import CameraLogger from './CameraLogger';
+import { useRef } from 'react';
+
 type CustomCanvasProps = {
-    fetched_data: rawData[];
-    filteredData: tabData[];
-    showAveragePlane: boolean;
-    setFilteredData: (value: React.SetStateAction<tabData[]>) => void;
-    setSelectedBar: (value: React.SetStateAction<tabData | null>) => void;
-    isGreaterChecked: boolean;
+    selectedBar: tabData | null;
 };
 
-function CustomCanvas({ fetched_data, filteredData, showAveragePlane, setFilteredData, setSelectedBar, isGreaterChecked }: CustomCanvasProps) {
+function CustomCanvas({ selectedBar }: CustomCanvasProps) {
+
+    /* console.log(selectedBar);
+    const [position, setPosition] = useState([3.4301854408067705, 13.60071277758357, -32.28290921318735]);
+    useEffect(() => {
+        setPosition(selectedBar ? [selectedBar.labelX, selectedBar.value, selectedBar.labelZ] : );
+    }, [selectedBar]);
+    console.log(position); */
+    const controls = useRef<any>(null); // Riferimento a OrbitControls
+  const initialCameraPosition = [3.4301854408067705, 13.60071277758357, -32.28290921318735];
+  const initialTarget = [25, 0, 10];
+
+  const resetCamera = () => {
+    const camera = controls.current.object; // Ottieni la camera da OrbitControls
+
+    if (camera) {
+      camera.position.set(...initialCameraPosition);
+      controls.current.target.set(...initialTarget);
+      controls.current.update(); // Sincronizza i controlli
+    }
+  };
 
     return (
+        <>
+        <button id="resetCamera" onClick={resetCamera}>Reset camera</button>
         <Canvas
-
             id='canvas'
             data-cy="cy-canvas"
             data-testid="cy-canvas"
@@ -33,14 +49,10 @@ function CustomCanvas({ fetched_data, filteredData, showAveragePlane, setFiltere
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} />
             <BarChart
-                fetched_data={fetched_data}
-                filteredData={filteredData}
-                showAveragePlane={showAveragePlane}
-                setFilteredData={setFilteredData}
-                setSelectedBar={setSelectedBar}
-                isGreaterChecked={isGreaterChecked}
-            />
+                selectedBar={selectedBar} />
+
             <OrbitControls makeDefault
+                ref={controls}
                 target={[25, 0, 10]}
                 dampingFactor={0.1}
             />
@@ -51,8 +63,9 @@ function CustomCanvas({ fetched_data, filteredData, showAveragePlane, setFiltere
                     axisColors={['red', 'green', 'blue']}
                     labelColor='black' />
             </GizmoHelper>
-            {/* <CameraLogger /> */}
+            <CameraLogger />
         </Canvas>
+        </>
     );
 }
 

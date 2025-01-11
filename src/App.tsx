@@ -3,6 +3,8 @@ import './App.css'
 import CustomCanvas from './components/CustomCanvas.tsx';
 import DynamicTable from './components/DynamicTable.tsx';
 import Filters from './components/Filters.tsx';
+import Footer from './components/Footer.tsx';
+import { DataContext } from './components/context.ts';
 
 export interface rawData {
   id: number;
@@ -89,8 +91,8 @@ function App() {
     { id: 67, labelX: 'More', value: 23, labelZ: 'Venezia' },
     { id: 68, labelX: 'More', value: 5, labelZ: 'Verona' }
   ];
-  let xLabels = new Set(fetched_data.map((d) => d.labelX));
-  let zLabels = new Set(fetched_data.map((d) => d.labelZ));
+  let xLabels = Array.from(new Set(fetched_data.map((d) => d.labelX)));
+  let zLabels = Array.from(new Set(fetched_data.map((d) => d.labelZ)));
   const data: tabData[] = fetched_data.map((d) => ({
     ...d,
     labelX: Array.from(xLabels).indexOf(d.labelX),
@@ -112,42 +114,46 @@ function App() {
     setSelectedBar(null); // Deseleziona la barra
     /* setShowAveragePlane(true); */ // Mostra il piano medio
   };
+
+  const handleCellClick = (id: string) => {
+    const clickedBar: tabData | undefined = data.find((bar) => bar.id.toString() === id);
+    console.log(clickedBar);
+    if (clickedBar) {
+      setSelectedBar(clickedBar); // Imposta la barra selezionata
+      if (isGreaterChecked)
+        setFilteredData(data.filter((d) => d.value >= clickedBar.value)); // Filtra i dati
+      else
+        setFilteredData(data.filter((d) => d.value <= clickedBar.value)); // Filtra i dati
+    }
+  }
+
   return (
-    <>
+    <DataContext.Provider value={{ data, filteredData, setFilteredData, setSelectedBar, xLabels, zLabels, showAveragePlane, isGreaterChecked }}>
       <div id='controls'>
-        <DynamicTable
-          filteredData={filteredData}
-          allData={data}
-          xLabels={Array.from(xLabels)}
-          zLabels={Array.from(zLabels)}
-          setFilteredData={setFilteredData}
-          setSelectedBar={setSelectedBar}
-          isGreaterChecked={isGreaterChecked} />
-        <div style={{ margin: "10px" }} id='buttons'>
+        <div id="title">
+          <h1>3Dataviz PoC</h1>
+        </div>
+        <DynamicTable onCellClick={handleCellClick}/>
+        <div id='buttons'>
           <button onClick={toggleAveragePlane}>
             {showAveragePlane ? "Nascondi piano medio" : "Mostra piano medio"}
           </button>
-          <button style={{ marginLeft: "10px" }} onClick={resetFilters}>Resetta filtri</button>
+          <button id='reset' onClick={resetFilters}>Resetta filtri</button>
         </div>
+        <div id='wrapper'>
+        <CustomCanvas selectedBar={selectedBar}
+        />
         <Filters
-          data={data}
-          setFilteredData={setFilteredData}
           selectedBar={selectedBar}
-          setSelectedBar={setSelectedBar}
           setIsGreaterChecked={setIsGreaterChecked}
-          isGreaterChecked={isGreaterChecked} />
+        />     
+        </div>
+        <Footer />
       </div>
-      <CustomCanvas
-        fetched_data={fetched_data}
-        filteredData={filteredData}
-        showAveragePlane={showAveragePlane}
-        setFilteredData={setFilteredData}
-        setSelectedBar={setSelectedBar}
-        isGreaterChecked={isGreaterChecked}
-      />
+      
 
-      {/*       <Footer /> */}
-    </>
+      
+    </DataContext.Provider>
   )
 }
 

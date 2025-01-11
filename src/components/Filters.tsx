@@ -1,13 +1,10 @@
 import { useMemo, useState } from 'react';
 import { tabData } from '../App';
+import { useDataContext } from './context';
 
 type FiltersProps = {
-  data: tabData[];
-  setFilteredData: (value: React.SetStateAction<tabData[]>) => void;
   selectedBar: tabData | null;
-  setSelectedBar: (value: React.SetStateAction<tabData | null>) => void;
   setIsGreaterChecked: (value: React.SetStateAction<boolean>) => void;
-  isGreaterChecked: boolean;
 }
 
 // Funzione per il filtro Top N
@@ -32,7 +29,9 @@ const filterBelowValue = (data: tabData[], value: number) => {
   return data.filter((d) => d.value <= value);
 };
 
-function Filters({ data, setFilteredData, selectedBar, setSelectedBar, setIsGreaterChecked, isGreaterChecked }: FiltersProps) {
+function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
+  const { data, setFilteredData, setSelectedBar } = useDataContext();
+  let { isGreaterChecked } = useDataContext();
   const [nValue, setNValue] = useState(""); // Valore di N per il filtro top/bottom
   const [isTopChecked, setIsTopChecked] = useState(false); // Checkbox top
   const [isBottomChecked, setIsBottomChecked] = useState(false); // Checkbox bottom
