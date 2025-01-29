@@ -9,13 +9,13 @@ import { useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { tabData } from "../App";
 import { useDataContext } from "./context";
-
+import { gsap } from "gsap"; // libreria per le animazioni
 
 type BarChartProps = {
   selectedBar: tabData | null;
 };
 
-function BarChart({ selectedBar  }: BarChartProps) {
+function BarChart({ selectedBar }: BarChartProps) {
   const { data, filteredData, setFilteredData, setSelectedBar, xLabels, zLabels, showAveragePlane, isGreaterChecked } = useDataContext();
   
   /* let xLabels = new Set(fetched_data.map((d) => d.labelX));
@@ -49,6 +49,7 @@ function BarChart({ selectedBar  }: BarChartProps) {
   const mouse = useRef(new THREE.Vector2());
 
   const { camera, scene } = useThree();
+
   const handleMouseMove = (event: MouseEvent) => {
     if (hoverTimeout.current !== null) {
       clearTimeout(hoverTimeout.current);
@@ -87,10 +88,30 @@ function BarChart({ selectedBar  }: BarChartProps) {
 
   useEffect(() => {
     if (selectedBar) {
-      camera.position.set(selectedBar.labelX * 6, selectedBar.value+10, -75);
-      camera.lookAt(selectedBar.labelX * 6 + 5, selectedBar.value/2, selectedBar.labelZ * 5 + 3);
+      // Centra la camera sulla barra selezionata
+      const barPosition = new THREE.Vector3(selectedBar.labelX * 6, selectedBar.value + 10, selectedBar.labelZ * 5 + 3);
+      
+      //  GSAP per la transizione
+      gsap.to(camera.position, {
+        x: barPosition.x,
+        y: barPosition.y , 
+        z: barPosition.z -50,
+        duration: 1, 
+        ease: "power2.out",
+      });
+
+      gsap.to(camera, {
+        zoom: 1.6, //livello del zoom
+        duration: 1,
+        ease: "power2.out",
+        onUpdate: () => {
+          camera.updateProjectionMatrix();
+        },
+      });
+
+      camera.lookAt(barPosition); // positionare la camrea sul bar selezionato
     }
-  }, [selectedBar]);
+  }, [selectedBar, camera]);
 
   const nLabel = xLabels.length;
   const xAxisLength = 6 * nLabel ;
@@ -109,12 +130,12 @@ function BarChart({ selectedBar  }: BarChartProps) {
               userData={{ id: d.id }}
               onClick={handleBarClick}
               aura={selectedBar ? selectedBar.id === d.id : false}
-          />
+            />
           );
         })};
       <XAxis length={xAxisLength} />
       <YAxis xLength={xAxisLength} />
-      <ZAxis length={zAxisLength}/>
+      <ZAxis length={zAxisLength} />
       {hoveredBar && <Tooltip position={tooltipPosition} bar={hoveredBar} />}
       {/* Piano medio, visibile solo se showAveragePlane è true */}
       {showAveragePlane && (

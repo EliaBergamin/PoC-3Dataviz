@@ -87,7 +87,12 @@ function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
             min="1"
             placeholder="Inserisci un numero"
             value={nValue}
-            onChange={(e) => setNValue(e.target.value)}
+            onChange={(e) => {
+              const newValue = e.target.value;
+              if (Number(newValue) > 0) {
+                setNValue(newValue); // set il valore solo se è un numero positivo
+              }
+            }}
           />
           <div>
             <input

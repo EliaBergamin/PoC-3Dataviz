@@ -4,6 +4,7 @@ import { GizmoHelper, GizmoViewport, OrbitControls } from '@react-three/drei';
 import BarChart from './BarChart';
 import CameraLogger from './CameraLogger';
 import { useRef } from 'react';
+import { gsap } from 'gsap';
 
 type CustomCanvasProps = {
     selectedBar: tabData | null;
@@ -18,16 +19,30 @@ function CustomCanvas({ selectedBar }: CustomCanvasProps) {
     }, [selectedBar]);
     console.log(position); */
     const controls = useRef<any>(null); // Riferimento a OrbitControls
-  const initialCameraPosition = [3.4301854408067705, 13.60071277758357, -32.28290921318735];
-  const initialTarget = [25, 0, 10];
+  const initialCameraPosition = [10,15,-55];
+  const initialTarget = [50, 0.5, 5];
+  const initialZoom = 1;
 
   const resetCamera = () => {
     const camera = controls.current.object; // Ottieni la camera da OrbitControls
 
     if (camera) {
+
+      //console.log('Before reset:', camera.position, controls.current.target, camera.zoom);
       camera.position.set(...initialCameraPosition);
       controls.current.target.set(...initialTarget);
+
+      gsap.to(camera, {
+        zoom: initialZoom, 
+        duration: 1, 
+        ease: "power2.out",
+        onUpdate: () => {
+          camera.updateProjectionMatrix();
+        },
+      });
+
       controls.current.update(); // Sincronizza i controlli
+      //console.log('After reset:', camera.position, controls.current.target, camera.zoom);
     }
   };
 
@@ -40,9 +55,9 @@ function CustomCanvas({ selectedBar }: CustomCanvasProps) {
             data-testid="cy-canvas"
             gl={{ preserveDrawingBuffer: true }}
             camera={{
-                position: [3.4301854408067705, 13.60071277758357, -32.28290921318735],
+                position: [10,15,-55],
                 rotation: [-3.025, -0.38, 3.2],
-                fov: 75,
+                fov: 55,
                 near: 0.1,
                 far: 1000
             }}>
@@ -53,7 +68,7 @@ function CustomCanvas({ selectedBar }: CustomCanvasProps) {
 
             <OrbitControls makeDefault
                 ref={controls}
-                target={[25, 0, 10]}
+                target={[50, 0.5, 5]}
                 dampingFactor={0.1}
             />
             <GizmoHelper
