@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import CustomCanvas from './components/CustomCanvas.tsx';
 import DynamicTable from './components/DynamicTable.tsx';
 import Filters from './components/Filters.tsx';
 import Footer from './components/Footer.tsx';
 import { DataContext } from './components/context.ts';
+import { fetchData } from './api.ts';
+import { useData } from "./components/DataProvider.tsx";
 
 export interface rawData {
   id: number;
@@ -21,7 +23,7 @@ export interface tabData {
 }
 
 function App() {
-  const fetched_data: rawData[] = [
+/*   const data: rawData[] = [
     { id: 1, labelX: 'Mele', value: 4, labelZ: 'Vicenza' },
     { id: 2, labelX: 'Mele', value: 5, labelZ: 'Padova' },
     { id: 3, labelX: 'Mele', value: 2, labelZ: 'Venezia' },
@@ -90,16 +92,20 @@ function App() {
     { id: 66, labelX: 'More', value: 11, labelZ: 'Padova' },
     { id: 67, labelX: 'More', value: 23, labelZ: 'Venezia' },
     { id: 68, labelX: 'More', value: 5, labelZ: 'Verona' }
-  ];
-  let xLabels = Array.from(new Set(fetched_data.map((d) => d.labelX)));
-  let zLabels = Array.from(new Set(fetched_data.map((d) => d.labelZ)));
-  const data: tabData[] = fetched_data.map((d) => ({
+  ]; */
+  const { data, loading, error } = useData();
+
+  if (loading || !data) return <p>Caricamento...</p>;
+  if (error) return <p>Errore: {error}</p>;
+  let xLabels = Array.from(new Set(data.map((d) => d.labelX)));
+  let zLabels = Array.from(new Set(data.map((d) => d.labelZ)));
+  const processed_data: tabData[] = data.map((d) => ({
     ...d,
     labelX: Array.from(xLabels).indexOf(d.labelX),
     labelZ: Array.from(zLabels).indexOf(d.labelZ)
   }));
 
-  const [filteredData, setFilteredData] = useState(data);
+  const [filteredData, setFilteredData] = useState(processed_data);
   const [selectedBar, setSelectedBar] = useState<tabData | null>(null);
   const [isGreaterChecked, setIsGreaterChecked] = useState(true); // Checkbox sopra una barra
 
@@ -110,25 +116,25 @@ function App() {
     setShowAveragePlane((prev) => !prev);
   };
   const resetFilters = () => {
-    setFilteredData(data); // Ripristina i dati originali
+    setFilteredData(processed_data); // Ripristina i dati originali
     setSelectedBar(null); // Deseleziona la barra
     /* setShowAveragePlane(true); */ // Mostra il piano medio
   };
 
   const handleCellClick = (id: string) => {
-    const clickedBar: tabData | undefined = data.find((bar) => bar.id.toString() === id);
+    const clickedBar: tabData | undefined = processed_data.find((bar) => bar.id.toString() === id);
     console.log(clickedBar);
     if (clickedBar) {
       setSelectedBar(clickedBar); // Imposta la barra selezionata
       if (isGreaterChecked)
-        setFilteredData(data.filter((d) => d.value >= clickedBar.value)); // Filtra i dati
+        setFilteredData(processed_data.filter((d) => d.value >= clickedBar.value)); // Filtra i dati
       else
-        setFilteredData(data.filter((d) => d.value <= clickedBar.value)); // Filtra i dati
+        setFilteredData(processed_data.filter((d) => d.value <= clickedBar.value)); // Filtra i dati
     }
   }
 
   return (
-    <DataContext.Provider value={{ data, filteredData, setFilteredData, setSelectedBar, xLabels, zLabels, showAveragePlane, isGreaterChecked }}>
+    <DataContext.Provider value={{ data: processed_data, filteredData, setFilteredData, setSelectedBar, xLabels, zLabels, showAveragePlane, isGreaterChecked }}>
       <div id='controls'>
         <div id="title">
           <h1>3Dataviz PoC</h1>
@@ -150,11 +156,9 @@ function App() {
         </div>
         <Footer />
       </div>
-      
-
-      
+          
     </DataContext.Provider>
-  )
+  );
 }
 
-export default App
+export default App;
