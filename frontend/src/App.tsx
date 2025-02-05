@@ -92,10 +92,11 @@ function App() {
     { id: 67, labelX: 'More', value: 23, labelZ: 'Venezia' },
     { id: 68, labelX: 'More', value: 5, labelZ: 'Verona' }
   ]; */
-  const { data, loading, error } = useData();
+  const { fetched, loading, error } = useData();
 
   if (loading ) return <p>Caricamento...</p>;
-  if (error || !data) return <p>Errore: {error}</p>;
+  if (error || !fetched) return <p>Errore: {error}</p>;
+  const data: rawData[] = fetched.data;
   let xLabels = Array.from(new Set(data.map((d) => d.labelX)));
   let zLabels = Array.from(new Set(data.map((d) => d.labelZ)));
   const processed_data: tabData[] = data.map((d) => ({
