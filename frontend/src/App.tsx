@@ -105,6 +105,8 @@ function App() {
     labelZ: Array.from(zLabels).indexOf(d.labelZ)
   }));
 
+  console.log(processed_data);
+
   const [filteredData, setFilteredData] = useState(processed_data);
   const [selectedBar, setSelectedBar] = useState<tabData | null>(null);
   const [isGreaterChecked, setIsGreaterChecked] = useState(true); // Checkbox sopra una barra
