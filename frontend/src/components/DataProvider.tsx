@@ -26,9 +26,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/api/call/");
+                const response = await axios.get("http://127.0.0.1:5000/api/call/");
                 // console.log("data: "+ response.data.data); response.data
-                setFetched(response.data as {data: rawData[], legend: Legend }); 
+                // setFetched(response.data as {data: rawData[], legend: Legend }); 
+                setFetched(response.data); 
             } catch (err) {
                 setError("Errore nel recupero dei dati");
             } finally {
