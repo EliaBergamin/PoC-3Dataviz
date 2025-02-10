@@ -6,7 +6,7 @@ type FiltersProps = {
   selectedBar: tabData | null;
   setIsGreaterChecked: (value: React.SetStateAction<boolean>) => void;
 }
-
+//TODO 1
 // Funzione per il filtro Top N
 const filterTopN = (data: tabData[], n: number) => {
   const sortedData = [...data].sort((a, b) => b.value - a.value);
@@ -75,8 +75,8 @@ function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
     setFilteredData(filteredData);
   };
 
-  return (
-    <div id="filter-container">
+  return (//TODO 3, TODO 7
+    <div id="filter-container"> 
       <div id="filter1">
         Filtra top o bottom n barre del grafico
         <div className="filter-body">

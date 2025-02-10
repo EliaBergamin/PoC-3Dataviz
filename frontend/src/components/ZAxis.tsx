@@ -38,8 +38,8 @@ function ZAxis({ length, color = 'blue' }: ZAxisProps) {
       {labels.map((label, index) => (
         <mesh key={index} position={label.position} rotation={label.rotation} >
           <textGeometry
-            args={[label.text, { font, size: 0.5, depth: 0.02 }]}
-          />
+            args={[label.text, { font, size: 0.5, depth: 0.02 }]} 
+          />{/*  TODO 1 */}
           <meshStandardMaterial color="black" />
         </mesh>
       ))}

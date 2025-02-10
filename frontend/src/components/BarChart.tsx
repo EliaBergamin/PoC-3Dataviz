@@ -10,6 +10,7 @@ import * as THREE from "three";
 import { tabData } from "../App";
 import { useDataContext } from "./context";
 import { gsap } from "gsap"; // libreria per le animazioni
+import InstancedBars from "./InstancedBars";
 
 type BarChartProps = {
   selectedBar: tabData | null;
@@ -17,7 +18,7 @@ type BarChartProps = {
 
 function BarChart({ selectedBar }: BarChartProps) {
   const { data, filteredData, setFilteredData, setSelectedBar, xLabels, zLabels, showAveragePlane, isGreaterChecked } = useDataContext();
-  
+
   /* let xLabels = new Set(fetched_data.map((d) => d.labelX));
   let zLabels = new Set(fetched_data.map((d) => d.labelZ));
   const data: tabData[] = fetched_data.map((d) => ({
@@ -28,7 +29,7 @@ function BarChart({ selectedBar }: BarChartProps) {
 
   const handleBarClick = (id: string, event: ThreeEvent<MouseEvent>) => {
     const clickedBar: tabData | undefined = data.find((bar) => bar.id.toString() === id);
-    
+
     const intersections = event.intersections;
 
     if (intersections[0]?.object === event.object) {
@@ -36,13 +37,13 @@ function BarChart({ selectedBar }: BarChartProps) {
         setSelectedBar(clickedBar); // Imposta la barra selezionata
         if (isGreaterChecked)
           setFilteredData(data.filter((d) => d.value >= clickedBar.value)); // Filtra i dati
-        else 
+        else
           setFilteredData(data.filter((d) => d.value <= clickedBar.value)); // Filtra i dati
       }
     }
   }
 
-  const [hoveredBar, setHoveredBar] = useState<tabData | null>(null);
+  const [hoveredBar, setHoveredBar] = useState<tabData | null>(null); //TODO 13
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [tooltipPosition, setTooltipPosition] = useState(new THREE.Vector3());
   const raycaster = useRef(new THREE.Raycaster());
@@ -77,7 +78,7 @@ function BarChart({ selectedBar }: BarChartProps) {
       } else {
         setHoveredBar(null); // Nessuna barra sotto il mouse
       }
-      
+
     }, 40);
   };
 
@@ -90,13 +91,13 @@ function BarChart({ selectedBar }: BarChartProps) {
     if (selectedBar) {
       // Centra la camera sulla barra selezionata
       const barPosition = new THREE.Vector3(selectedBar.labelX * 6, selectedBar.value + 10, selectedBar.labelZ * 5 + 3);
-      
+
       //  GSAP per la transizione
       gsap.to(camera.position, {
         x: barPosition.x,
-        y: barPosition.y , 
-        z: barPosition.z -50,
-        duration: 1, 
+        y: barPosition.y,
+        z: barPosition.z - 50,
+        duration: 1,
         ease: "power2.out",
       });
 
@@ -114,12 +115,12 @@ function BarChart({ selectedBar }: BarChartProps) {
   }, [selectedBar, camera]);
 
   const nLabel = xLabels.length;
-  const xAxisLength = 6 * nLabel ;
-  const zAxisLength = 6 * zLabels.length ;
+  const xAxisLength = 6 * nLabel; //TODO 1
+  const zAxisLength = 6 * zLabels.length;
 
   return (
     <>
-      {
+      {/* {
         data.map((d: tabData) => {
           const isFiltered = filteredData.some((f) => f.labelX === d.labelX && f.labelZ === d.labelZ && f.value === d.value);
           return (
@@ -132,20 +133,20 @@ function BarChart({ selectedBar }: BarChartProps) {
               aura={selectedBar ? selectedBar.id === d.id : false}
             />
           );
-        })};
+        })}; */}
+      <InstancedBars selectedBar={selectedBar} />
       <XAxis length={xAxisLength} />
       <YAxis xLength={xAxisLength} />
       <ZAxis length={zAxisLength} />
       {hoveredBar && <Tooltip position={tooltipPosition} bar={hoveredBar} />}
-      {/* Piano medio, visibile solo se showAveragePlane è true */}
-      {showAveragePlane && (
+      {showAveragePlane && ( //TODO 3
         <mesh
-          position={[xAxisLength/2, data.map((d) => d.value).reduce((acc, curr) => acc + curr, 0) / data.length, zAxisLength/2]}
-          rotation={[-Math.PI / 2, 0, 0]} 
+          position={[xAxisLength / 2, data.map((d) => d.value).reduce((acc, curr) => acc + curr, 0) / data.length, zAxisLength / 2]}
+          rotation={[-Math.PI / 2, 0, 0]}
           userData={{ id: "average" }}
         >
-          <planeGeometry args={[xAxisLength, zAxisLength]}/>
-          <meshStandardMaterial color="lightgray" transparent={true} opacity={0.4} depthWrite={false} side={THREE.DoubleSide}/>
+          <planeGeometry args={[xAxisLength, zAxisLength]} />
+          <meshStandardMaterial color="lightgray" transparent={true} opacity={0.4} depthWrite={false} side={THREE.DoubleSide} />
         </mesh>
       )}
     </>

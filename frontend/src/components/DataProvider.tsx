@@ -23,7 +23,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
+    useEffect(() => { //TODO 16
         const fetchData = async () => {
             try {
                 const response = await axios.get("http://localhost:5000/api/meteo1");

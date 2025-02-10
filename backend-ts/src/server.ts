@@ -41,7 +41,7 @@ const cities = [
 ];
 const latitudes = cities.map(city => city.latitude).join(",");
 const longitudes = cities.map(city => city.longitude).join(",");
-const URL = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitudes}&longitude=${longitudes}&start_date=2025-01-01&end_date=2025-01-05&hourly=temperature_2m`;
+const URL = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitudes}&longitude=${longitudes}&start_date=2024-01-01&end_date=2024-01-11&hourly=temperature_2m`;
 const legend = {
     x: "DateTime",
     y: "Temperature",

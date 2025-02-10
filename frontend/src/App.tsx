@@ -6,8 +6,9 @@ import Filters from './components/Filters.tsx';
 import Footer from './components/Footer.tsx';
 import { DataContext } from './components/context.ts';
 import { useData } from "./components/DataProvider.tsx";
+import Scene from './components/testInstance.tsx';
 
-export interface rawData {
+export interface rawData { //TODO 1
   id: number;
   labelX: string;
   value: number;
@@ -106,7 +107,7 @@ function App() {
   }));
 
   const [filteredData, setFilteredData] = useState(processed_data);
-  const [selectedBar, setSelectedBar] = useState<tabData | null>(null);
+  const [selectedBar, setSelectedBar] = useState<tabData | null>(null); //TODO 13
   const [isGreaterChecked, setIsGreaterChecked] = useState(true); // Checkbox sopra una barra
 
   const [showAveragePlane, setShowAveragePlane] = useState(true); // Stato per la visibilità del piano medio

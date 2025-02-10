@@ -17,7 +17,7 @@ type XAxisProps = {
     color?: string;
 };
 
-function XAxis({ length, color = 'red' }: XAxisProps) {
+function XAxis({ length, color = 'red' }: XAxisProps) { //TODO 1
     // Assi personalizzati con lunghezze differenti
     const { xLabels } = useDataContext();
 

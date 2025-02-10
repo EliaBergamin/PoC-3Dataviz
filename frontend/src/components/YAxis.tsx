@@ -40,7 +40,7 @@ function YAxis({ color = 'green', xLength }: YAxisProps) {
         <bufferGeometry attach="geometry" {...yAxis} />
         <lineBasicMaterial attach="material" color={color} />
       </line>
-      {labels.map((label, index) => (
+      {labels.map((label, index) => ( //TODO 3
         <mesh key={index} position={label.position} rotation={label.rotation} >
           <textGeometry
             args={[label.text, { font, size: 0.5, depth: 0.02 }]}
