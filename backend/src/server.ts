@@ -49,28 +49,28 @@ const cities = [
     }
 ];
 
-const key= process.env.API_KEY
-const url= process.env.API_URL
 
-const legend: Legend = {
-    x: "DateTime",
-    y: "Temperature",
-    z: "City"
-}
+app.get("/apiK/call", async (req: Request, res: Response) => {
+    const key= process.env.API_KEY
+    const url= process.env.API_URL
 
-app.get("/api/call", async (req: Request, res: Response) => {
+    const legend: Legend = {
+        x: "DateTime",
+        y: "Temperature",
+        z: "City"
+    }
     try {
-        const cachedData = await getFromCache<{data: rawData[], legend: Legend}>("data1");
+        const cachedData = await getFromCache<{data: rawData[], legend: Legend}>("apiK");
         if(cachedData) {
             console.log("sto prendendo dalla cache");
             res.json(cachedData);
-            await deleteFromCache("data1"); // elimino dalla cache per testare il corretto funzionamento di memcache
+            await deleteFromCache("apiK"); // elimino dalla cache per testare il corretto funzionamento di memcache
             return;
         }
 
         console.log("sto facendo la request");
 
-        const promises = cities.map(item => axios.get(url + "?access_key="+key+"&query="+item.name));
+        const promises = cities.map(item => axios.get(url + "?access_key="+key+"&query="+item.name+"&historical_date=2015-01-21&hourly=1&interval=1"));
         const results = await Promise.all(promises);
         let data: rawData[] = [];
         
@@ -81,7 +81,49 @@ app.get("/api/call", async (req: Request, res: Response) => {
             data.push(entry);
         });
         const d = {data: data, legend: legend}
-        await setToCache("data1",d)
+        await setToCache("apiK",d);
+        res.json(d);
+    }
+    catch (error) {
+        res.status(500).json({ error: "Errore nel recupero dei dati" });
+    }
+});
+
+app.get("/api/call", async (req: Request, res: Response) => {
+    const latitudes = cities.map(city => city.latitude).join(",");
+    const longitudes = cities.map(city => city.longitude).join(",");
+    const URL = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitudes}&longitude=${longitudes}&start_date=2024-01-01&end_date=2024-01-01&hourly=temperature_2m`;
+    const legend = {
+        x: "DateTime",
+        y: "Temperature",
+        z: "City"
+    }
+
+    try {
+
+        const cachedData = await getFromCache<{data: rawData[], legend: Legend}>("api");
+        if(cachedData) {
+            console.log("sto prendendo dalla cache");
+            res.json(cachedData);
+            await deleteFromCache("api"); // elimino dalla cache per testare il corretto funzionamento di memcache
+            return;
+        }
+
+        console.log("sto facendo la request");
+
+        const response = await axios.get(URL);
+        let data: rawData[] = [];
+        for (let i = 0; i < cities.length; i++) {
+            const hours: string[] = response.data[i].hourly.time;
+            const values: number[] = response.data[i].hourly.temperature_2m;
+            for (let j = 0; j < hours.length; j++) {
+                const entry: rawData = { id: j * cities.length + i, labelX: hours[j].replace('T', ' '), value: values[j], labelZ: cities[i].name };
+                data.push(entry);
+            }
+        }
+
+        const d = {data: data, legend: legend}
+        await setToCache("api",d);
         res.json(d);
     }
     catch (error) {
