@@ -70,7 +70,7 @@ app.get("/apiK/call", async (req: Request, res: Response) => {
 
         console.log("sto facendo la request");
 
-        const promises = cities.map(item => axios.get(url + "?access_key="+key+"&query="+item.name+"&historical_date=2015-01-21&hourly=1&interval=1"));
+        const promises = cities.map(item => axios.get(url + "?access_key="+key+"&query="+item.name));
         const results = await Promise.all(promises);
         let data: rawData[] = [];
         
