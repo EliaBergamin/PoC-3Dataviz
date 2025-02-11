@@ -39,7 +39,7 @@ function DynamicTable({ onCellClick }: DynamicTableProps) {
               const isHighlighted = filteredData.some(
                 (d) => d.labelX === index && d.labelZ === i && d.value === value
               );
-              const id = index * row.length + i + 1;
+              const id = index * row.length + i;
               return (
                 <td key={id} id={id.toString()} onClick={() => onCellClick(id.toString())} style={{ backgroundColor: isHighlighted ? "lightgreen" : "lightgray" }}>
                   {value}
