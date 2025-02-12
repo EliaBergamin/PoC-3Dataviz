@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import axios from "axios";
+import Redis from "ioredis";
 
 interface rawData {
     id: number;
@@ -10,6 +11,8 @@ interface rawData {
 }
 
 const app = express();
+const redis = new Redis(); // Connessione locale su 127.0.0.1:6379
+const CACHE_EXPIRATION = 3600; // Cache di 1 ora
 app.use(cors());
 app.use(express.json());
 
@@ -49,8 +52,16 @@ const legend = {
 }
 
 app.get("/api/meteo1", async (req: Request, res: Response) => {
+    const cacheKey = "meteo1";
     try {
+        const cachedData = await redis.get("meteo1");
+        if (cachedData) {
+            res.json(JSON.parse(cachedData));
+            console.log("Dati recuperati dalla cache");
+            return;
+        }
         const response = await axios.get(URL);
+        console.log("Dati recuperati da Open-Meteo");
         let data: rawData[] = [];
         for (let i = 0; i < cities.length; i++) {
             const hours: string[] = response.data[i].hourly.time;
@@ -60,7 +71,9 @@ app.get("/api/meteo1", async (req: Request, res: Response) => {
                 data.push(entry);
             }
         }
-        res.json({data: data, legend: legend});
+        const result = { data: data, legend: legend };
+        await redis.setex(cacheKey, CACHE_EXPIRATION, JSON.stringify(result));
+        res.json(result);
     }
     catch (error) {
         res.status(500).json({ error: "Errore nel recupero dei dati" });
