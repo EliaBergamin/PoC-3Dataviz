@@ -4,6 +4,8 @@ import myFont from 'three/examples/fonts/helvetiker_regular.typeface.json';
 import * as THREE from 'three';
 import { extend, Object3DNode } from "@react-three/fiber";
 import { useDataContext } from './context';
+import InstancedLabels from './InstancedLabels.tsx';
+
 extend({ TextGeometry });
 
 declare module "@react-three/fiber" {
@@ -41,14 +43,15 @@ function XAxis({ length, color = 'red' }: XAxisProps) { //TODO 1
                 <bufferGeometry attach="geometry" {...xAxis} />
                 <lineBasicMaterial attach="material" color={color} />
             </line>
-            {labels.map((label, index) => (
+            {/* {labels.map((label, index) => (
                 <mesh key={index} position={label.position} rotation={label.rotation} >
                     <textGeometry
                         args={[label.text, { font, size: 0.5, depth: 0.02 }]}
                     />
                     <meshStandardMaterial color="black" />
                 </mesh>
-            ))}
+            ))} */}
+            <InstancedLabels labels={labels} />
         </>
     );
 }

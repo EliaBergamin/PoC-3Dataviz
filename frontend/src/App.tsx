@@ -6,7 +6,6 @@ import Filters from './components/Filters.tsx';
 import Footer from './components/Footer.tsx';
 import { DataContext } from './components/context.ts';
 import { useData } from "./components/DataProvider.tsx";
-import Scene from './components/testInstance.tsx';
 
 export interface rawData { //TODO 1
   id: number;

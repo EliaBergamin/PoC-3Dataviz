@@ -11,11 +11,22 @@ type InstancedBarsProps = {
 };
 function InstancedBars({ selectedBar }: InstancedBarsProps) {
     const { data, filteredData, setFilteredData, setSelectedBar, isGreaterChecked } = useDataContext();
-    const meshRef = useRef<THREE.InstancedMesh>(null);
-    const dummy = new THREE.Object3D();
+    /* const meshRef = useRef<THREE.InstancedMesh>(null);
     const colorArray = useMemo(() => new Float32Array(data.length * 3), [data]); // Array di colori
     const opacityArray = useMemo(() => new Float32Array(data.length), [filteredData]); // Array opacità
+    const geometry = new THREE.IcosahedronGeometry();
+    const material = new THREE.MeshPhongMaterial();
+    const starMesh = new THREE.InstancedMesh(geometry, material, data.length);
+    const dummy = new THREE.Object3D();
+    filteredData.forEach((row, i) => {
+        dummy.position.set(row.labelX * 6 + 3, row.value / 2, row.labelZ * 5 + 3);
 
+        dummy.scale.y = row.value;
+
+        dummy.updateMatrix();
+        starMesh.setMatrixAt(i, dummy.matrix);
+        starMesh.setColorAt(i, new THREE.Color(COLORS[row.labelZ]));
+    });
     useEffect(() => {
         if (!meshRef.current) return;
 
@@ -24,7 +35,7 @@ function InstancedBars({ selectedBar }: InstancedBarsProps) {
             dummy.position.set(row.labelX * 6 + 3, row.value / 2, row.labelZ * 5 + 3);
 
             // Set scala (altezza della barra)
-            dummy.scale.set(2, row.value, 2);
+            dummy.scale.set(1, row.value, 1);
 
             dummy.updateMatrix();
             if (meshRef.current) {
@@ -45,15 +56,25 @@ function InstancedBars({ selectedBar }: InstancedBarsProps) {
         if (meshRef.current.instanceColor) {
             meshRef.current.instanceColor.needsUpdate = true;
         }
-    }, [data]);
+    }, [data]); */
+    const instancedMeshRef = useRef<THREE.InstancedMesh>(null);
+    const dummy = new THREE.Object3D();
 
-    // ShaderMaterial personalizzato con opacità variabile
-    const materialRef = useRef<THREE.ShaderMaterial>(null);
     useEffect(() => {
-        if (materialRef.current) {
-            materialRef.current.uniforms.opacity.value = opacityArray;
-        }
-    }, [opacityArray]);
+        if (!instancedMeshRef.current) return;
+
+        filteredData.forEach((row, i) => {
+            dummy.position.set(row.labelX * 6 + 3, row.value / 2, row.labelZ * 5 + 3);
+            dummy.scale.set(1, row.value, 1);
+            dummy.updateMatrix();
+            instancedMeshRef.current!.setMatrixAt(i, dummy.matrix);
+            instancedMeshRef.current!.setColorAt(i, new THREE.Color(COLORS[row.labelZ]));
+        });
+
+        instancedMeshRef.current.instanceMatrix.needsUpdate = true;
+        instancedMeshRef.current.instanceColor!.needsUpdate = true;
+    }, [filteredData]);
+
 
     const handleBarClick = (id: number, event: ThreeEvent<MouseEvent>) => {
         const clickedBar: tabData | undefined = data.find((bar) => bar.id === id);
@@ -72,44 +93,30 @@ function InstancedBars({ selectedBar }: InstancedBarsProps) {
     }
 
     return (
+
         <instancedMesh
-            ref={meshRef}
-            args={[undefined, undefined, data.length]}
+            ref={instancedMeshRef}
+            args={[new THREE.BoxGeometry(2,1,2), new THREE.MeshStandardMaterial(), data.length]}
             onClick={(e) => {
                 const id = e.instanceId; // Ottieni l'indice della barra cliccata
                 if (id !== undefined) handleBarClick(data[id].id, e);
             }}
-        >
-            <boxGeometry args={[1, 1, 1]}>
-                <instancedBufferAttribute attach="attributes-opacity" args={[opacityArray, 1]} />
-                <instancedBufferAttribute attach="attributes-color" args={[colorArray, 3]} />
-            </boxGeometry>
-            <shaderMaterial
-                ref={materialRef}
-                uniforms={{ opacity: { value: opacityArray } }}
-                vertexShader={`
-                    varying vec3 vColor;
-                    varying float vOpacity;
-                    attribute vec3 color;
-                    attribute float opacity;
-                    void main() {
-                        vColor = color;
-                        vOpacity = opacity;
-                        gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.0);
-                    }`
-                }
-                fragmentShader={`
-                    varying vec3 vColor;
-                    varying float vOpacity;
-                    void main() {
-                        gl_FragColor = vec4(vColor, vOpacity);
-                    }`
-                }
-                transparent
-                
-            />
-        </instancedMesh>
+        />
     );
 };
 
 export default InstancedBars;
+
+/* <instancedMesh
+         ref={meshRef}
+         args={[undefined, undefined, data.length]}
+         onClick={(e) => {
+             const id = e.instanceId; // Ottieni l'indice della barra cliccata
+             if (id !== undefined) handleBarClick(data[id].id, e);
+         }}
+     >
+         <boxGeometry args={[2, 1, 2]}>
+             
+         </boxGeometry>
+         <meshPhongMaterial />
+     </instancedMesh> */

@@ -5,6 +5,7 @@ import BarChart from './BarChart';
 import CameraLogger from './CameraLogger';
 import { useRef } from 'react';
 import { gsap } from 'gsap';
+import { Perf } from 'r3f-perf';
 
 type CustomCanvasProps = {
   selectedBar: tabData | null;
@@ -62,7 +63,6 @@ function CustomCanvas({ selectedBar }: CustomCanvasProps) { //TODO 7
           far: 1000
         }}>
         <AdaptiveDpr pixelated /> {/* Riduce automaticamente la risoluzione */}
-        <BakeShadows /> {/* Pre-renderizza le ombre per migliorare la performance */}
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} />
         <BarChart
@@ -80,6 +80,7 @@ function CustomCanvas({ selectedBar }: CustomCanvasProps) { //TODO 7
             axisColors={['red', 'green', 'blue']}
             labelColor='black' />
         </GizmoHelper>
+        <Perf position='top-right'/>
         <CameraLogger />
       </Canvas>
     </>

@@ -120,7 +120,7 @@ function BarChart({ selectedBar }: BarChartProps) {
 
   return (
     <>
-      {
+      {/* {
         data.map((d: tabData) => {
           const isFiltered = filteredData.some((f) => f.labelX === d.labelX && f.labelZ === d.labelZ && f.value === d.value);
           return (
@@ -133,8 +133,8 @@ function BarChart({ selectedBar }: BarChartProps) {
               aura={selectedBar ? selectedBar.id === d.id : false}
             />
           );
-        })};
-      {/*<InstancedBars selectedBar={selectedBar} />*/}
+        })}; */}
+      <InstancedBars selectedBar={selectedBar} />
       <XAxis length={xAxisLength} />
       <YAxis xLength={xAxisLength} />
       <ZAxis length={zAxisLength} />

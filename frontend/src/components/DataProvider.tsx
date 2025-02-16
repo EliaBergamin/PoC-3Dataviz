@@ -27,7 +27,6 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const fetchData = async () => {
             try {
                 const response = await axios.get("http://localhost:5000/api/meteo1");
-                console.log("data: "+ response.data.data); 
                 setFetched(response.data); 
             } catch (err) {
                 setError("Errore nel recupero dei dati");

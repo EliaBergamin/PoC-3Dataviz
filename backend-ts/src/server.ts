@@ -44,7 +44,7 @@ const cities = [
 ];
 const latitudes = cities.map(city => city.latitude).join(",");
 const longitudes = cities.map(city => city.longitude).join(",");
-const URL = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitudes}&longitude=${longitudes}&start_date=2024-01-01&end_date=2024-01-11&hourly=temperature_2m`;
+const URL = `https://archive-api.open-meteo.com/v1/archive?latitude=${latitudes}&longitude=${longitudes}&start_date=2024-01-01&end_date=2024-03-21&hourly=temperature_2m`;
 const legend = {
     x: "DateTime",
     y: "Temperature",
@@ -55,11 +55,11 @@ app.get("/api/meteo1", async (req: Request, res: Response) => {
     const cacheKey = "meteo1";
     try {
         const cachedData = await redis.get("meteo1");
-        if (cachedData) {
+        /* if (cachedData) {
             res.json(JSON.parse(cachedData));
             console.log("Dati recuperati dalla cache");
             return;
-        }
+        } */
         const response = await axios.get(URL);
         console.log("Dati recuperati da Open-Meteo");
         let data: rawData[] = [];
