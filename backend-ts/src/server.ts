@@ -55,11 +55,11 @@ app.get("/api/meteo1", async (req: Request, res: Response) => {
     const cacheKey = "meteo1";
     try {
         const cachedData = await redis.get("meteo1");
-        /* if (cachedData) {
+        if (cachedData) {
             res.json(JSON.parse(cachedData));
             console.log("Dati recuperati dalla cache");
             return;
-        } */
+        }
         const response = await axios.get(URL);
         console.log("Dati recuperati da Open-Meteo");
         let data: rawData[] = [];
