@@ -2,14 +2,14 @@ import { createContext, useContext } from "react";
 import { tabData } from "../App";
 
 type Data = {
-    data: tabData[];
-    filteredData: tabData[];
-    setFilteredData: (value: React.SetStateAction<tabData[]>) => void;
-    setSelectedBar: (value: React.SetStateAction<tabData | null>) => void;
-    xLabels: string[];
-    zLabels: string[];
-    showAveragePlane: boolean;
-    isGreaterChecked: boolean;
+  data: tabData[];
+  filteredData: tabData[];
+  setFilteredData: (y: React.SetStateAction<tabData[]>) => void;
+  setSelectedBar: (y: React.SetStateAction<tabData | null>) => void;
+  xLabels: string[];
+  zLabels: string[];
+  showAveragePlane: boolean;
+  isGreaterChecked: boolean;
 };
 
 export const DataContext = createContext<Data | undefined>(undefined);

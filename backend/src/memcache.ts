@@ -1,4 +1,4 @@
-import memjs from 'memjs';
+import memjs from "memjs";
 
 const memcached = memjs.Client.create("localhost:11211");
 
@@ -22,10 +22,14 @@ export function getFromCache<T>(key: string): Promise<T | null> {
   });
 }
 
-export function setToCache<T>(key: string, value: T, ttl: number = 3600): Promise<void> {
+export function setToCache<T>(
+  key: string,
+  value: T,
+  ttl: number = 3600,
+): Promise<void> {
   return new Promise((resolve, reject) => {
     const stringifiedValue = JSON.stringify(value);
-    memcached.set(key, stringifiedValue, { expires: ttl }, err => {
+    memcached.set(key, stringifiedValue, { expires: ttl }, (err) => {
       if (err) {
         console.error("Error setting cached data:", err);
       }
@@ -35,12 +39,12 @@ export function setToCache<T>(key: string, value: T, ttl: number = 3600): Promis
 }
 
 export function deleteFromCache(key: string): Promise<void> {
-  return new Promise((resolve,reject) => {
-    memcached.delete((key),(err) => {
+  return new Promise((resolve, reject) => {
+    memcached.delete(key, (err) => {
       if (err) {
         console.error("Error deleting cached data:", err);
       }
       resolve();
-    })
-  })
+    });
+  });
 }

@@ -16,31 +16,41 @@ type BarChartProps = {
 };
 
 function BarChart({ selectedBar }: BarChartProps) {
-  const { data, filteredData, setFilteredData, setSelectedBar, xLabels, zLabels, showAveragePlane, isGreaterChecked } = useDataContext();
-  
-  /* let xLabels = new Set(fetched_data.map((d) => d.labelX));
-  let zLabels = new Set(fetched_data.map((d) => d.labelZ));
+  const {
+    data,
+    filteredData,
+    setFilteredData,
+    setSelectedBar,
+    xLabels,
+    zLabels,
+    showAveragePlane,
+    isGreaterChecked
+  } = useDataContext();
+
+  /* let xLabels = new Set(fetched_data.map((d) => d.x));
+  let zLabels = new Set(fetched_data.map((d) => d.z));
   const data: tabData[] = fetched_data.map((d) => ({
     ...d,
-    labelX: Array.from(xLabels).indexOf(d.labelX),
-    labelZ: Array.from(zLabels).indexOf(d.labelZ)
+    x: Array.from(xLabels).indexOf(d.x),
+    z: Array.from(zLabels).indexOf(d.z)
   })); */
 
   const handleBarClick = (id: string, event: ThreeEvent<MouseEvent>) => {
-    const clickedBar: tabData | undefined = data.find((bar) => bar.id.toString() === id);
-    
+    const clickedBar: tabData | undefined = data.find(
+      (bar) => bar.id.toString() === id
+    );
+
     const intersections = event.intersections;
 
     if (intersections[0]?.object === event.object) {
       if (clickedBar) {
         setSelectedBar(clickedBar); // Imposta la barra selezionata
         if (isGreaterChecked)
-          setFilteredData(data.filter((d) => d.value >= clickedBar.value)); // Filtra i dati
-        else 
-          setFilteredData(data.filter((d) => d.value <= clickedBar.value)); // Filtra i dati
+          setFilteredData(data.filter((d) => d.y >= clickedBar.y)); // Filtra i dati
+        else setFilteredData(data.filter((d) => d.y <= clickedBar.y)); // Filtra i dati
       }
     }
-  }
+  };
 
   const [hoveredBar, setHoveredBar] = useState<tabData | null>(null);
   const hoverTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -65,19 +75,24 @@ function BarChart({ selectedBar }: BarChartProps) {
 
       // Trova le intersezioni con le barre
       const intersects = raycaster.current.intersectObjects(scene.children);
-      const filteredIntersects = intersects.filter(i => i.object.userData.id !== 'average');
+      const filteredIntersects = intersects.filter(
+        (i) => i.object.userData.id !== "average"
+      );
       if (filteredIntersects.length > 0) {
         const firstObject = filteredIntersects[0].object; // L'oggetto più vicino
-        const intersectedBar = data.find((bar) => bar.id === firstObject.userData.id);
+        const intersectedBar = data.find(
+          (bar) => bar.id === firstObject.userData.id
+        );
 
         if (intersectedBar) {
           setHoveredBar(intersectedBar ? intersectedBar : null); // Mostra il tooltip
-          setTooltipPosition(intersects[0].point.add(new THREE.Vector3(0.5, -0.5, 0)));
+          setTooltipPosition(
+            intersects[0].point.add(new THREE.Vector3(0.5, -0.5, 0))
+          );
         }
       } else {
         setHoveredBar(null); // Nessuna barra sotto il mouse
       }
-      
     }, 40);
   };
 
@@ -89,24 +104,28 @@ function BarChart({ selectedBar }: BarChartProps) {
   useEffect(() => {
     if (selectedBar) {
       // Centra la camera sulla barra selezionata
-      const barPosition = new THREE.Vector3(selectedBar.labelX * 6, selectedBar.value + 10, selectedBar.labelZ * 5 + 3);
-      
+      const barPosition = new THREE.Vector3(
+        selectedBar.x * 6,
+        selectedBar.y + 10,
+        selectedBar.z * 5 + 3
+      );
+
       //  GSAP per la transizione
       gsap.to(camera.position, {
         x: barPosition.x,
-        y: barPosition.y , 
-        z: barPosition.z -50,
-        duration: 1, 
-        ease: "power2.out",
+        y: barPosition.y,
+        z: barPosition.z - 50,
+        duration: 1,
+        ease: "power2.out"
       });
 
       gsap.to(camera, {
-        zoom: 1.6, //livello del zoom
+        zoom: 1.6, //livello dello zoom
         duration: 1,
         ease: "power2.out",
         onUpdate: () => {
           camera.updateProjectionMatrix();
-        },
+        }
       });
 
       camera.lookAt(barPosition); // positionare la camrea sul bar selezionato
@@ -114,25 +133,27 @@ function BarChart({ selectedBar }: BarChartProps) {
   }, [selectedBar, camera]);
 
   const nLabel = xLabels.length;
-  const xAxisLength = 6 * nLabel ;
-  const zAxisLength = 6 * zLabels.length ;
+  const xAxisLength = 6 * nLabel;
+  const zAxisLength = 6 * zLabels.length;
 
   return (
     <>
-      {
-        data.map((d: tabData) => {
-          const isFiltered = filteredData.some((f) => f.labelX === d.labelX && f.labelZ === d.labelZ && f.value === d.value);
-          return (
-            <Bar
-              key={d.id}
-              row={d}
-              isFiltered={isFiltered}
-              userData={{ id: d.id }}
-              onClick={handleBarClick}
-              aura={selectedBar ? selectedBar.id === d.id : false}
-            />
-          );
-        })};
+      {data.map((d: tabData) => {
+        const isFiltered = filteredData.some(
+          (f) => f.x === d.x && f.z === d.z && f.y === d.y
+        );
+        return (
+          <Bar
+            key={d.id}
+            row={d}
+            isFiltered={isFiltered}
+            userData={{ id: d.id }}
+            onClick={handleBarClick}
+            aura={selectedBar ? selectedBar.id === d.id : false}
+          />
+        );
+      })}
+      ;
       <XAxis length={xAxisLength} />
       <YAxis xLength={xAxisLength} />
       <ZAxis length={zAxisLength} />
@@ -140,12 +161,23 @@ function BarChart({ selectedBar }: BarChartProps) {
       {/* Piano medio, visibile solo se showAveragePlane è true */}
       {showAveragePlane && (
         <mesh
-          position={[xAxisLength/2, data.map((d) => d.value).reduce((acc, curr) => acc + curr, 0) / data.length, zAxisLength/2]}
-          rotation={[-Math.PI / 2, 0, 0]} 
+          position={[
+            xAxisLength / 2,
+            data.map((d) => d.y).reduce((acc, curr) => acc + curr, 0) /
+              data.length,
+            zAxisLength / 2
+          ]}
+          rotation={[-Math.PI / 2, 0, 0]}
           userData={{ id: "average" }}
         >
-          <planeGeometry args={[xAxisLength, zAxisLength]}/>
-          <meshStandardMaterial color="lightgray" transparent={true} opacity={0.4} depthWrite={false} side={THREE.DoubleSide}/>
+          <planeGeometry args={[xAxisLength, zAxisLength]} />
+          <meshStandardMaterial
+            color="lightgray"
+            transparent={true}
+            opacity={0.4}
+            depthWrite={false}
+            side={THREE.DoubleSide}
+          />
         </mesh>
       )}
     </>

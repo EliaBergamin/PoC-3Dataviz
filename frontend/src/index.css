@@ -69,20 +69,19 @@ button:focus-visible {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-
-#title{
+#title {
   text-align: center;
   font-size: larger;
   background-color: #282c34;
@@ -94,7 +93,7 @@ code {
   margin: 0;
 }
 
-#filter-container{
+#filter-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -105,21 +104,21 @@ main {
   flex: 1;
 }
 
-footer{
+footer {
   background-color: #282c34;
-  color : white;
+  color: white;
   padding: 1em;
   text-align: center;
   margin-top: 2em;
 }
 
-.filter-body{
+.filter-body {
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   justify-content: space-around;
 }
 
-button{
+button {
   border-radius: 50px;
   background-color: black;
   color: white;

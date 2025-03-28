@@ -35,16 +35,23 @@
 //     }
 //   }
 // }
-Cypress.Commands.add('percySnapshotElement', { prevSubject: true }, (subject, name, options) => {
+Cypress.Commands.add(
+  "percySnapshotElement",
+  { prevSubject: true },
+  (subject, name, options) => {
     cy.percySnapshot(name, {
-      domTransformation: (documentClone) => scope(documentClone, subject.selector),
-      ...options,
+      domTransformation: (documentClone) =>
+        scope(documentClone, subject.selector),
+      ...options
     });
-  });
-  
-  function scope(documentClone: Document, selector: string): Document {
-    const element = documentClone.querySelector(selector);
-    documentClone.querySelector('body')!.innerHTML = element ? element.outerHTML : "";
-  
-    return documentClone;
   }
+);
+
+function scope(documentClone: Document, selector: string): Document {
+  const element = documentClone.querySelector(selector);
+  documentClone.querySelector("body")!.innerHTML = element
+    ? element.outerHTML
+    : "";
+
+  return documentClone;
+}

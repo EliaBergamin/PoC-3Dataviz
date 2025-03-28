@@ -3,7 +3,6 @@
   margin: 0 auto;
   padding: 0.5rem;
   text-align: center;
-
 }
 
 #canvas {
@@ -26,7 +25,7 @@ canvas {
 #table-container {
   float: left;
   overflow: scroll;
-  height: 65rem;
+  height: 88vh;
 }
 #table {
   border: 1px solid black;

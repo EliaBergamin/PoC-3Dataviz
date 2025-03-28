@@ -1,53 +1,57 @@
-import { useMemo, useState } from 'react';
-import { tabData } from '../App';
-import { useDataContext } from './context';
+import { useMemo, useState } from "react";
+import { tabData } from "../App";
+import { useDataContext } from "./context";
 
 type FiltersProps = {
   selectedBar: tabData | null;
   setIsGreaterChecked: (value: React.SetStateAction<boolean>) => void;
-}
+};
 
 // Funzione per il filtro Top N
 const filterTopN = (data: tabData[], n: number) => {
-  const sortedData = [...data].sort((a, b) => b.value - a.value);
+  const sortedData = [...data].sort((a, b) => b.y - a.y);
   return sortedData.slice(0, n);
 };
 
 // Funzione per il filtro Bottom N
 const filterBottomN = (data: tabData[], n: number) => {
-  const sortedData = [...data].sort((a, b) => a.value - b.value);
+  const sortedData = [...data].sort((a, b) => a.y - b.y);
   return sortedData.slice(0, n);
 };
 
 // Funzione per il filtro sopra la media
-const filterAboveValue = (data: tabData[], value: number) => {
-  return data.filter((d) => d.value >= value);
+const filterAbovey = (data: tabData[], value: number) => {
+  return data.filter((d) => d.y >= value);
 };
 
 // Funzione per il filtro sotto la media
-const filterBelowValue = (data: tabData[], value: number) => {
-  return data.filter((d) => d.value <= value);
+const filterBelowy = (data: tabData[], value: number) => {
+  return data.filter((d) => d.y <= value);
 };
 
 function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
   const { data, setFilteredData, setSelectedBar } = useDataContext();
   let { isGreaterChecked } = useDataContext();
-  const [nValue, setNValue] = useState(""); // Valore di N per il filtro top/bottom
+  const [nvalue, setNvalue] = useState(""); // Valore di N per il filtro top/bottom
   const [isTopChecked, setIsTopChecked] = useState(false); // Checkbox top
   const [isBottomChecked, setIsBottomChecked] = useState(false); // Checkbox bottom
   const [isUpperChecked, setIsUpperChecked] = useState(false); // Checkbox sopra la media
   const [isLowerChecked, setIsLowerChecked] = useState(false); // Checkbox sotto la media
-/*   const [isGreaterChecked, setIsGreaterChecked] = useState(true); // Checkbox sopra una barra
- */
+  /*   const [isGreaterChecked, setIsGreaterChecked] = useState(true); // Checkbox sopra una barra
+   */
   const globalAverage = useMemo(() => {
-    return data.length > 0 ? data.map((d) => d.value).reduce((acc, curr) => acc + curr, 0) / data.length : 0;
+    return data.length > 0
+      ? data.map((d) => d.y).reduce((acc, curr) => acc + curr, 0) /
+          data.length
+      : 0;
   }, []);
 
   const handleTopBottomFilter = () => {
     if (!isTopChecked && !isBottomChecked) return;
     let filteredData = [...data];
-    if (isTopChecked) filteredData = filterTopN(filteredData, parseInt(nValue));
-    if (isBottomChecked) filteredData = filterBottomN(filteredData, parseInt(nValue));
+    if (isTopChecked) filteredData = filterTopN(filteredData, parseInt(nvalue));
+    if (isBottomChecked)
+      filteredData = filterBottomN(filteredData, parseInt(nvalue));
     setFilteredData(filteredData);
     setSelectedBar(null);
   };
@@ -55,8 +59,10 @@ function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
   const handleAverageFilter = () => {
     if (!isUpperChecked && !isLowerChecked) return;
     let filteredData = [...data];
-    if (isUpperChecked) filteredData = filterAboveValue([...data], globalAverage);
-    if (isLowerChecked) filteredData = filterBelowValue([...data], globalAverage);
+    if (isUpperChecked)
+      filteredData = filterAbovey([...data], globalAverage);
+    if (isLowerChecked)
+      filteredData = filterBelowy([...data], globalAverage);
     setFilteredData(filteredData);
     setSelectedBar(null);
   };
@@ -65,13 +71,11 @@ function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
     let filteredData = [...data];
     /* console.log(selectedBar);
     console.log(isGreaterChecked); */
-    if (!selectedBar) 
-      return;
+    if (!selectedBar) return;
     isGreaterChecked = !isGreaterChecked;
-    if (isGreaterChecked) 
-      filteredData = filterAboveValue(filteredData, selectedBar.value);
-    else 
-      filteredData = filterBelowValue(filteredData, selectedBar.value);
+    if (isGreaterChecked)
+      filteredData = filterAbovey(filteredData, selectedBar.y);
+    else filteredData = filterBelowy(filteredData, selectedBar.y);
     setFilteredData(filteredData);
   };
 
@@ -86,11 +90,11 @@ function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
             id="number-selector"
             min="1"
             placeholder="Inserisci un numero"
-            value={nValue}
+            value={nvalue}
             onChange={(e) => {
-              const newValue = e.target.value;
-              if (Number(newValue) > 0) {
-                setNValue(newValue); // set il valore solo se è un numero positivo
+              const newy = e.target.value;
+              if (Number(newy) > 0) {
+                setNvalue(newy); // set il valore solo se è un numero positivo
               }
             }}
           />
@@ -157,7 +161,7 @@ function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
           <button onClick={handleAverageFilter}>Filtra</button>
         </div>
       </div>
-      <div id='filter3'>
+      <div id="filter3">
         Filtra rispetto a una barra
         <div className="filter-body">
           <div>
@@ -193,4 +197,3 @@ function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
 }
 
 export default Filters;
-
