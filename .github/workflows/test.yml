@@ -25,6 +25,10 @@ jobs:
         run: |
           cd frontend
           npm ci
+      - name: Check format
+        run: |
+          cd frontend
+          npx prettier --check .
       - name: Run lint
         run: |
           cd frontend
