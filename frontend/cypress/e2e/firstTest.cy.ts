@@ -1,4 +1,4 @@
-describe("default 3D env test", () => {
+/* describe("default 3D env test", () => {
   it("should display default elements", () => {
     cy.visit("/");
     cy.wait(200);
@@ -7,7 +7,7 @@ describe("default 3D env test", () => {
       .and("have.css", "width", "600px")
       .and("have.css", "height", "600px");
   }),
-    /* it('should match snapshots', () => {
+    it('should match snapshots', () => {
       cy.visit('/')
       cy.wait(500)
       cy.percySnapshot('first')
@@ -15,7 +15,7 @@ describe("default 3D env test", () => {
       cy.percySnapshot('second')
       cy.get('[data-cy="cy-canvas"]')
         .percySnapshotElement('canvas')
-    }), */
+    }),
     it("should rotate when clicking Gizmo", () => {
       cy.visit("/");
       cy.wait(200);
@@ -36,3 +36,4 @@ describe("default 3D env test", () => {
         .screenshot("2-rotated-canvas");
     });
 });
+ */

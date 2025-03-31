@@ -5,7 +5,7 @@ type BarProps = {
   row: tabData;
   isFiltered: boolean;
   aura: boolean;
-  userData: Record<string, any>;
+  userData: Record<string, number>;
   onClick: (id: string, e: ThreeEvent<MouseEvent>) => void;
   onHover?: (e: ThreeEvent<PointerEvent>, bar: Entry | null) => void;
 };
