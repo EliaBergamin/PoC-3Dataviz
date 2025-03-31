@@ -1,7 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../state/store";
-import { tabData } from "../App";
+import { Entry, tabData } from "../App";
 
 type DynamicTableProps = {
   onCellClick: (id: string) => void;
@@ -11,33 +11,34 @@ function DynamicTable({ onCellClick }: DynamicTableProps) {
   const { data, filteredData } = useSelector(
     (state: RootState) => state.dataset
   );
-  if (!data) return null;
-  console.log(data);
-  console.log(data[0].x, data[0].y, data[0].z);
-  const xLabels = Array.from(new Set(data.map((d) => d.x)));
-  const zLabels = Array.from(new Set(data.map((d) => d.z)));
-  const processedData: tabData[] = data.map((d) => ({
-    ...d,
-    x: Array.from(xLabels).indexOf(d.x),
-    value: d.y,
-    z: Array.from(zLabels).indexOf(d.z)
-  }));
-  if (!filteredData) return null;
-  console.log(data[0].y);
-  console.log(processedData[0].y);
-  console.log(filteredData[0].y);
-  const processedfilteredData: tabData[] = filteredData.map((d) => ({
-    ...d,
-    x: Array.from(xLabels).indexOf(d.x),
-    value: d.y,
-    z: Array.from(zLabels).indexOf(d.z)
-  }));
-  console.log(processedfilteredData[0].y);
-  //console.log(xLabels, zLabels);
+  const xLabels = useMemo(() => {
+    if (!data) return [];
+    return Array.from(new Set(data.map((d) => d.x)));
+  }, [data]);
+
+  const zLabels = useMemo(() => {
+    if (!data) return [];
+    return Array.from(new Set(data.map((d) => d.z)));
+  }, [data]);
+
+  const processData = useCallback(
+    (dataset: Entry[] | null): tabData[] => {
+      if (!dataset) return [];
+
+      return dataset.map((d) => ({
+        ...d,
+        x: xLabels.indexOf(d.x),
+        value: d.y,
+        z: zLabels.indexOf(d.z),
+      }));
+    },
+    [xLabels, zLabels] // Dipende dalle etichette
+  );
+
+  const processedData = useMemo(() => processData(data), [processData, data]);
+  const processedfilteredData = useMemo(() => processData(filteredData), [processData, filteredData]);
+
   const tableData = useMemo(() => {
-    //usememo viene utilizzata per calcolare tabledata,
-    // array bidimensionale che rappresenta i valori della
-    // tabella, eseguito solo quando data cambia
     const result: number[][] = [];
     const nLabel = xLabels.length;
     for (let i = 0; i < nLabel; i++) {
@@ -49,6 +50,9 @@ function DynamicTable({ onCellClick }: DynamicTableProps) {
     }
     return result;
   }, [data]);
+
+  // ✅ Ora il return non interrompe l'esecuzione degli hook
+  if (!data || !tableData) return <p>Loading...</p>;
   // creazione della struttura della tabella, per evidenziare le celle,
   // vengono filtrate e se fanno parte dei valori da mostrare, vengono
   // colorate di verde

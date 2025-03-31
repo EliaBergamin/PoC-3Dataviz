@@ -1,11 +1,13 @@
 import { tabData } from "../App";
 import { Canvas } from "@react-three/fiber";
 import { GizmoHelper, GizmoViewport, OrbitControls } from "@react-three/drei";
+import { OrbitControls as OrbitControlsType } from 'three-stdlib';
 import BarChart from "./BarChart";
 import CameraLogger from "./CameraLogger";
 import { useRef } from "react";
 import { gsap } from "gsap";
 import { Perf } from "r3f-perf";
+import { PerspectiveCamera } from "three";
 
 type CustomCanvasProps = {
   selectedBar: tabData | null;
@@ -18,13 +20,14 @@ function CustomCanvas({ selectedBar }: CustomCanvasProps) {
       setPosition(selectedBar ? [selectedBar.x, selectedBar.y, selectedBar.z] : );
   }, [selectedBar]);
   console.log(position); */
-  const controls = useRef<any>(null); // Riferimento a OrbitControls
-  const initialCameraPosition = [10, 15, -55];
-  const initialTarget = [50, 0.5, 5];
+  const controls = useRef<OrbitControlsType>(null); // Riferimento a OrbitControls
+  const initialCameraPosition: [number, number, number] = [10, 15, -55];
+  const initialTarget: [number, number, number] = [50, 0.5, 5];
   const initialZoom = 1;
 
   const resetCamera = () => {
-    const camera = controls.current.object; // Ottieni la camera da OrbitControls
+    if (!controls.current) return; // Assicurati che i controlli siano inizializzati
+    const camera = controls.current.object as PerspectiveCamera; // Ottieni la camera da OrbitControls
 
     if (camera) {
       //console.log('Before reset:', camera.position, controls.current.target, camera.zoom);
