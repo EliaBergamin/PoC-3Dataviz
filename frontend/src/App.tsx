@@ -27,8 +27,8 @@ function App() {
   if (loading ) return <p>Caricamento...</p>;
   if (error || !fetched) return <p>Errore: {error}</p>;
   const data: rawData[] = fetched.data;
-  let xLabels = Array.from(new Set(data.map((d) => d.labelX)));
-  let zLabels = Array.from(new Set(data.map((d) => d.labelZ)));
+  const xLabels = Array.from(new Set(data.map((d) => d.labelX)));
+  const zLabels = Array.from(new Set(data.map((d) => d.labelZ)));
   const processed_data: tabData[] = data.map((d) => ({
     ...d,
     labelX: Array.from(xLabels).indexOf(d.labelX),
