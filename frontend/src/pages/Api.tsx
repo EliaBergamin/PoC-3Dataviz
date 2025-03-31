@@ -1,18 +1,19 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { Entry, tabData } from "../App";
+import { tabData } from "../App";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../state/store";
-import CustomCanvas from "../components/CustomCanvas";
 import DynamicTable from "../components/DynamicTable";
-import Filters from "../components/Filters";
 import Footer from "../components/Footer";
-import { fetchDataset, filterData, setSelected } from "../state/dataset/datasetSlice";
-
+import {
+  fetchDataset,
+  filterData,
+  setSelected
+} from "../state/dataset/datasetSlice";
 
 const Api = () => {
-  const [selectedBar, setSelectedBar] = useState<tabData | null>(null);
-  const [isGreaterChecked, setIsGreaterChecked] = useState(true); // Checkbox sopra una barra
+  const [, setSelectedBar] = useState<tabData | null>(null);
+  const [isGreaterChecked] = useState(true); // Checkbox sopra una barra
 
   const [showAveragePlane, setShowAveragePlane] = useState(true); // Stato per la visibilità del piano medio
   const { id } = useParams();

@@ -1,11 +1,4 @@
-import { useState } from "react";
 import "./App.css";
-import CustomCanvas from "./components/CustomCanvas.tsx";
-import DynamicTable from "./components/DynamicTable.tsx";
-import Filters from "./components/Filters.tsx";
-import Footer from "./components/Footer.tsx";
-import { DataContext } from "./components/context.ts";
-import { useData } from "./components/DataProvider.tsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home.tsx";
 import Api from "./pages/Api.tsx";

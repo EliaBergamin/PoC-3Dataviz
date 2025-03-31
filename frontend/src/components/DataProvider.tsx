@@ -36,7 +36,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({
 
         setFetched(response.data);
       } catch (err) {
-        setError("Errore nel recupero dei dati");
+        setError("Errore nel recupero dei dati: " + (err as Error).message);
       } finally {
         setLoading(false);
       }
