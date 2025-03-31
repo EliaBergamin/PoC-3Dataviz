@@ -5,12 +5,15 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../state/store";
 import DynamicTable from "../components/DynamicTable";
 import Footer from "../components/Footer";
-import { fetchDataset, filterData, setSelected } from "../state/dataset/datasetSlice";
-
+import {
+  fetchDataset,
+  filterData,
+  setSelected
+} from "../state/dataset/datasetSlice";
 
 const Api = () => {
   const [, setSelectedBar] = useState<tabData | null>(null);
-  const [isGreaterChecked,] = useState(true); // Checkbox sopra una barra
+  const [isGreaterChecked] = useState(true); // Checkbox sopra una barra
 
   const [showAveragePlane, setShowAveragePlane] = useState(true); // Stato per la visibilità del piano medio
   const { id } = useParams();

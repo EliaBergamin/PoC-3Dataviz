@@ -23,13 +23,13 @@ export default tseslint.config(
         "warn",
         { allowConstantExport: true }
       ],
-      'no-console': 'warn',
-      'semi': ['error', 'always'],
-      'no-trailing-spaces': 'error',
-      'no-duplicate-imports': 'error',
-      'no-magic-numbers': 'warn',
-      'prefer-const': 'warn',
-      '@typescript-eslint/no-inferrable-types': 'warn'
+      "no-console": "warn",
+      semi: ["error", "always"],
+      "no-trailing-spaces": "error",
+      "no-duplicate-imports": "error",
+      "no-magic-numbers": "warn",
+      "prefer-const": "warn",
+      "@typescript-eslint/no-inferrable-types": "warn"
     }
   }
 );

@@ -1,7 +1,7 @@
 import { tabData } from "../App";
 import { Canvas } from "@react-three/fiber";
 import { GizmoHelper, GizmoViewport, OrbitControls } from "@react-three/drei";
-import { OrbitControls as OrbitControlsType } from 'three-stdlib';
+import { OrbitControls as OrbitControlsType } from "three-stdlib";
 import BarChart from "./BarChart";
 import CameraLogger from "./CameraLogger";
 import { useRef } from "react";

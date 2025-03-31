@@ -29,14 +29,17 @@ function DynamicTable({ onCellClick }: DynamicTableProps) {
         ...d,
         x: xLabels.indexOf(d.x),
         value: d.y,
-        z: zLabels.indexOf(d.z),
+        z: zLabels.indexOf(d.z)
       }));
     },
     [xLabels, zLabels] // Dipende dalle etichette
   );
 
   const processedData = useMemo(() => processData(data), [processData, data]);
-  const processedfilteredData = useMemo(() => processData(filteredData), [processData, filteredData]);
+  const processedfilteredData = useMemo(
+    () => processData(filteredData),
+    [processData, filteredData]
+  );
 
   const tableData = useMemo(() => {
     const result: number[][] = [];
