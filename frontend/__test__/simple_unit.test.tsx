@@ -1,12 +1,11 @@
-import React from "react";
+/* import React from "react";
 import { render, screen } from "@testing-library/react";
 //import "@testing-library/jest-dom";
+import Bar from "../src/components/Bar"; */
 import { describe, it, expect } from "vitest";
-import Bar from "../src/components/Bar";
 
 describe("Bar Component", () => {
   it("renders without crashing", () => {
-    
     expect(1).toBe(1);
   });
 

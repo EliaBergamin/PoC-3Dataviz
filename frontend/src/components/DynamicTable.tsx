@@ -35,8 +35,8 @@ function DynamicTable({ onCellClick }: DynamicTableProps) {
   console.log(processedfilteredData[0].y);
   //console.log(xLabels, zLabels);
   const tableData = useMemo(() => {
-    //usememo viene utilizzata per calcolare tabledata, 
-    // array bidimensionale che rappresenta i valori della 
+    //usememo viene utilizzata per calcolare tabledata,
+    // array bidimensionale che rappresenta i valori della
     // tabella, eseguito solo quando data cambia
     const result: number[][] = [];
     const nLabel = xLabels.length;
@@ -49,8 +49,8 @@ function DynamicTable({ onCellClick }: DynamicTableProps) {
     }
     return result;
   }, [data]);
-  // creazione della struttura della tabella, per evidenziare le celle, 
-  // vengono filtrate e se fanno parte dei valori da mostrare, vengono 
+  // creazione della struttura della tabella, per evidenziare le celle,
+  // vengono filtrate e se fanno parte dei valori da mostrare, vengono
   // colorate di verde
   return (
     <table id="table">

@@ -22,7 +22,14 @@ export default tseslint.config(
       "react-refresh/only-export-components": [
         "warn",
         { allowConstantExport: true }
-      ]
+      ],
+      'no-console': 'warn',
+      'semi': ['error', 'always'],
+      'no-trailing-spaces': 'error',
+      'no-duplicate-imports': 'error',
+      'no-magic-numbers': 'warn',
+      'prefer-const': 'warn',
+      '@typescript-eslint/no-inferrable-types': 'warn'
     }
   }
 );

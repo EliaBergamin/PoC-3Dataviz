@@ -1,18 +1,14 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Entry, tabData } from "../App";
-import { useSelector } from "react-redux";
-import { RootState } from "../state/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../state/store";
 import CustomCanvas from "../components/CustomCanvas";
 import DynamicTable from "../components/DynamicTable";
 import Filters from "../components/Filters";
 import Footer from "../components/Footer";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../state/store";
-import { fetchDataset } from "../state/dataset/datasetSlice";
-import { filterData } from "../state/dataset/datasetSlice";
-import { setSelected } from "../state/dataset/datasetSlice";
+import { fetchDataset, filterData, setSelected } from "../state/dataset/datasetSlice";
+
 
 const Api = () => {
   const [selectedBar, setSelectedBar] = useState<tabData | null>(null);
@@ -63,9 +59,7 @@ const Api = () => {
     console.log(clickedBar);
     if (clickedBar) {
       setSelectedBar(clickedBar); // Imposta la barra selezionata
-      dispatch(
-        filterData({ value: clickedBar.y, greater: isGreaterChecked })
-      );
+      dispatch(filterData({ value: clickedBar.y, greater: isGreaterChecked }));
       dispatch(
         setSelected({
           ...clickedBar,

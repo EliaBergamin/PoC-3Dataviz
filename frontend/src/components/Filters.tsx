@@ -41,10 +41,9 @@ function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
    */
   const globalAverage = useMemo(() => {
     return data.length > 0
-      ? data.map((d) => d.y).reduce((acc, curr) => acc + curr, 0) /
-          data.length
+      ? data.map((d) => d.y).reduce((acc, curr) => acc + curr, 0) / data.length
       : 0;
-  }, []);
+  }, [data]);
 
   const handleTopBottomFilter = () => {
     if (!isTopChecked && !isBottomChecked) return;
@@ -59,10 +58,8 @@ function Filters({ selectedBar, setIsGreaterChecked }: FiltersProps) {
   const handleAverageFilter = () => {
     if (!isUpperChecked && !isLowerChecked) return;
     let filteredData = [...data];
-    if (isUpperChecked)
-      filteredData = filterAbovey([...data], globalAverage);
-    if (isLowerChecked)
-      filteredData = filterBelowy([...data], globalAverage);
+    if (isUpperChecked) filteredData = filterAbovey([...data], globalAverage);
+    if (isLowerChecked) filteredData = filterBelowy([...data], globalAverage);
     setFilteredData(filteredData);
     setSelectedBar(null);
   };
